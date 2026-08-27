@@ -1,26 +1,186 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Cute Pastel Colors */
+    --color-bubble-pink: #FFD7E5;
+    --color-bubble-blue: #C3E5FF;
+    --color-bubble-purple: #E5CBFF;
+    --color-bubble-yellow: #FFF4C3;
+    --color-bubble-green: #D0F5D0;
+    --color-bubble-peach: #FFE4D6;
+
+    /* Primary Colors */
+    --color-primary: #FF6B9D;
+    --color-primary-dark: #FF5285;
+    --color-secondary: #FFB347;
+    --color-accent: #C77DFF;
+
+    /* Neutrals */
+    --color-bg: #FFFBF5;
+    --color-surface: #FFFFFF;
+    --color-text: #3D3D4E;
+    --color-text-light: #8E8E93;
+    --color-border: #F0E6F6;
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(255, 107, 157, 0.08);
+    --shadow-md: 0 4px 16px rgba(255, 107, 157, 0.12);
+    --shadow-lg: 0 8px 24px rgba(255, 107, 157, 0.16);
+    --shadow-float: 0 12px 32px rgba(255, 107, 157, 0.2);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)] font-body;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fredoka', 'Nunito', sans-serif;
+    font-weight: 600;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Bubble Cards */
+  .bubble-card {
+    @apply bg-white rounded-[28px] p-6 shadow-[var(--shadow-md)] border-2 border-transparent;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .bubble-card:hover {
+    @apply shadow-[var(--shadow-lg)] -translate-y-1;
+  }
+
+  .bubble-card-active {
+    @apply border-[var(--color-primary)] shadow-[var(--shadow-lg)];
+  }
+
+  /* Bubble Buttons */
+  .btn-bubble {
+    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300;
+    @apply shadow-[var(--shadow-sm)];
+    font-family: 'Fredoka', sans-serif;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-bubble:hover {
+    @apply shadow-[var(--shadow-md)] -translate-y-0.5;
+  }
+
+  .btn-bubble:active {
+    @apply scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white;
+  }
+
+  .btn-secondary {
+    @apply bg-gradient-to-r from-[var(--color-secondary)] to-[#FFA500] text-white;
+  }
+
+  /* Pastel Badges */
+  .badge-bubble {
+    @apply inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold;
+    font-family: 'Fredoka', sans-serif;
+  }
+
+  .badge-pink {
+    @apply bg-[var(--color-bubble-pink)] text-[var(--color-primary)];
+  }
+
+  .badge-blue {
+    @apply bg-[var(--color-bubble-blue)] text-blue-600;
+  }
+
+  .badge-purple {
+    @apply bg-[var(--color-bubble-purple)] text-purple-600;
+  }
+
+  .badge-yellow {
+    @apply bg-[var(--color-bubble-yellow)] text-yellow-700;
+  }
+
+  .badge-green {
+    @apply bg-[var(--color-bubble-green)] text-green-700;
+  }
+
+  /* Floating Elements */
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+
+  /* Bubble Input */
+  .input-bubble {
+    @apply w-full px-5 py-3.5 rounded-[20px] border-2 border-[var(--color-border)];
+    @apply bg-white text-[var(--color-text)] placeholder:text-[var(--color-text-light)];
+    @apply focus:outline-none focus:border-[var(--color-primary)] focus:shadow-[var(--shadow-md)];
+    @apply transition-all duration-300;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* Cute Icons */
+  .icon-bubble {
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl;
+    @apply shadow-[var(--shadow-sm)];
+  }
+
+  /* Progress Dots */
+  .progress-dot {
+    @apply w-3 h-3 rounded-full transition-all duration-300;
+  }
+
+  .progress-dot-active {
+    @apply bg-[var(--color-primary)] w-8;
+  }
+
+  .progress-dot-inactive {
+    @apply bg-[var(--color-border)];
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* Emoji animations */
+.emoji-bounce {
+  display: inline-block;
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }

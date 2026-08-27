@@ -88,52 +88,65 @@ function GoalsForm() {
   if (!checkInId) return null
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF]">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">💕</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>✨</div>
+      <div className="fixed top-40 left-1/4 text-4xl opacity-20 float-animation" style={{animationDelay: '2s'}}>🌟</div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#E7E1D7]">
-        <div className="max-w-3xl mx-auto px-4 py-4">
-          <h1 className="font-serif text-xl tracking-tight text-[#1F2421]">
-            Chọn mục tiêu
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-xl border-b-2 border-pink-100">
+        <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+          <h1 className="font-heading text-xl font-bold text-gray-800">
+            Chọn mục tiêu 🎯
           </h1>
+          <div className="flex gap-1.5">
+            <div className="progress-dot progress-dot-active"></div>
+            <div className="progress-dot progress-dot-active"></div>
+            <div className="progress-dot progress-dot-inactive"></div>
+          </div>
         </div>
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-3xl p-8 border border-[#E7E1D7]">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-4">
-            Bước tiếp theo
+        <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30">
+          <span className="badge-bubble badge-pink">
+            ✨ Bước tiếp theo
           </span>
-          <h2 className="font-serif text-3xl tracking-tight text-[#1F2421] mb-3">
-            Bạn muốn cải thiện <span className="italic text-[#C4612F]">điều gì</span> nhất?
+          <h2 className="font-heading text-3xl font-bold text-gray-800 mt-4 mb-3">
+            Bạn muốn cải thiện <span className="text-primary">điều gì</span> nhất?
           </h2>
-          <p className="text-[#5C635D] font-light mb-8">
-            Chọn 1 mục tiêu để nhận 3 kế hoạch hành động được cá nhân hóa
+          <p className="text-gray-600 font-light mb-8">
+            Chọn 1 mục tiêu để nhận 3 kế hoạch hành động được cá nhân hóa 🎁
           </p>
 
           <div className="grid gap-4 mb-8">
-            {GOALS.map(goal => (
+            {GOALS.map((goal, index) => (
               <button
                 key={goal.id}
                 type="button"
                 onClick={() => setSelectedGoal(goal.id)}
-                className={`w-full p-6 rounded-2xl border-2 text-left transition-all ${
+                style={{animationDelay: `${index * 0.1}s`}}
+                className={`w-full p-5 rounded-[24px] border-3 text-left transition-all duration-300 ${
                   selectedGoal === goal.id
-                    ? 'border-[#C4612F] bg-[#F2E3D6]'
-                    : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                    ? 'border-primary bg-gradient-to-br from-pink-50 to-purple-50 shadow-bubble-lg scale-[1.02]'
+                    : 'border-transparent bg-white hover:border-pink-200 hover:shadow-bubble-md hover:scale-[1.01]'
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-3xl">{goal.icon}</div>
+                  <div className="icon-bubble bg-gradient-to-br from-white to-pink-50 border-2 border-pink-100 flex-shrink-0">
+                    <span className="text-3xl">{goal.icon}</span>
+                  </div>
                   <div className="flex-1">
-                    <h3 className="font-serif text-lg text-[#1F2421] mb-1">
+                    <h3 className="font-heading text-lg font-semibold text-gray-800 mb-1">
                       {goal.title}
                     </h3>
-                    <p className="text-sm font-light text-[#5C635D]">
+                    <p className="text-sm font-light text-gray-600">
                       {goal.description}
                     </p>
                   </div>
                   {selectedGoal === goal.id && (
-                    <div className="w-6 h-6 rounded-full bg-[#C4612F] flex items-center justify-center text-white text-sm">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-pink-500 flex items-center justify-center text-white text-lg font-bold shadow-bubble flex-shrink-0">
                       ✓
                     </div>
                   )}
@@ -143,17 +156,17 @@ function GoalsForm() {
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-[20px]">
+              <p className="text-sm text-red-600 font-medium">⚠️ {error}</p>
             </div>
           )}
 
           <button
             onClick={handleSubmit}
             disabled={!selectedGoal || loading}
-            className="w-full px-6 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all hover:translate-y-[-2px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            className="btn-bubble btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
           >
-            {loading ? 'Đang tạo kế hoạch...' : 'Tạo kế hoạch hành động'}
+            {loading ? '✨ Đang tạo kế hoạch...' : '🚀 Tạo kế hoạch hành động'}
           </button>
         </div>
       </div>

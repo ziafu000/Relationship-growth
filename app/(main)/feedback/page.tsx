@@ -64,54 +64,59 @@ function FeedbackForm() {
   if (!executionId) return null
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF]">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">🎉</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>💖</div>
+      <div className="fixed top-40 left-1/4 text-4xl opacity-20 float-animation" style={{animationDelay: '2s'}}>⭐</div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#E7E1D7]">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-xl border-b-2 border-purple-100">
         <div className="max-w-3xl mx-auto px-4 py-4">
-          <h1 className="font-serif text-xl tracking-tight text-[#1F2421]">
-            Feedback
+          <h1 className="font-heading text-xl font-bold text-gray-800">
+            Feedback 💭
           </h1>
         </div>
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E7E1D7]">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-4">
-            Chia sẻ trải nghiệm
+        <div className="bubble-card bg-gradient-to-br from-white to-purple-50/30">
+          <span className="badge-bubble badge-purple">
+            🌟 Chia sẻ trải nghiệm
           </span>
-          <h2 className="font-serif text-3xl tracking-tight text-[#1F2421] mb-3">
-            Mọi thứ diễn ra <span className="italic text-[#C4612F]">thế nào</span>?
+          <h2 className="font-heading text-3xl font-bold text-gray-800 mt-4 mb-3">
+            Mọi thứ diễn ra <span className="text-primary">thế nào</span>?
           </h2>
-          <p className="text-[#5C635D] font-light mb-8">
-            Feedback của bạn giúp chúng tôi đề xuất tốt hơn cho lần sau
+          <p className="text-gray-600 font-light mb-8">
+            Feedback của bạn giúp chúng tôi đề xuất tốt hơn cho lần sau 🎯
           </p>
 
           {/* Outcome */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-4">
               Tổng thể, trải nghiệm như thế nào? *
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { id: 'great', label: '😊 Tuyệt vời', emoji: '😊' },
-                { id: 'good', label: '🙂 Tốt', emoji: '🙂' },
-                { id: 'okay', label: '😐 Ổn', emoji: '😐' },
-                { id: 'difficult', label: '😰 Khó khăn', emoji: '😰' },
-                { id: 'didnt_work', label: '😔 Không hiệu quả', emoji: '😔' },
+                { id: 'great', label: 'Tuyệt vời', emoji: '😊' },
+                { id: 'good', label: 'Tốt', emoji: '🙂' },
+                { id: 'okay', label: 'Ổn', emoji: '😐' },
+                { id: 'difficult', label: 'Khó khăn', emoji: '😰' },
+                { id: 'didnt_work', label: 'Không hiệu quả', emoji: '😔' },
               ].map(item => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setOutcome(item.id)}
-                  className={`p-4 rounded-xl border-2 transition-all text-left ${
+                  className={`p-4 rounded-[20px] border-3 transition-all text-center ${
                     outcome === item.id
-                      ? 'border-[#C4612F] bg-[#F2E3D6]'
-                      : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                      ? 'border-primary bg-gradient-to-br from-pink-50 to-purple-50 shadow-bubble-lg scale-105'
+                      : 'border-transparent bg-white hover:border-pink-200 hover:shadow-bubble'
                   }`}
                 >
-                  <div className="text-2xl mb-1">{item.emoji}</div>
-                  <div className="text-sm font-light text-[#1F2421]">
-                    {item.label.replace(item.emoji + ' ', '')}
+                  <div className="text-3xl mb-2 emoji-bounce">{item.emoji}</div>
+                  <div className="text-sm font-semibold text-gray-800">
+                    {item.label}
                   </div>
                 </button>
               ))}
@@ -120,30 +125,31 @@ function FeedbackForm() {
 
           {/* What Worked */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
-              Điều gì hiệu quả?
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-2">
+              Điều gì hiệu quả? 👍
             </h3>
-            <p className="text-sm font-light text-[#5C635D] mb-3">Chọn tất cả những gì áp dụng</p>
+            <p className="text-sm font-light text-gray-600 mb-4">Chọn tất cả những gì áp dụng</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { id: 'timing', label: 'Thời điểm phù hợp' },
-                { id: 'activity_choice', label: 'Hoạt động phù hợp' },
-                { id: 'conversation', label: 'Trò chuyện sâu sắc' },
-                { id: 'atmosphere', label: 'Không khí tốt' },
-                { id: 'steps_clear', label: 'Hướng dẫn rõ ràng' },
-                { id: 'bonding', label: 'Tăng kết nối' },
+                { id: 'timing', label: 'Thời điểm phù hợp', emoji: '⏰' },
+                { id: 'activity_choice', label: 'Hoạt động phù hợp', emoji: '🎯' },
+                { id: 'conversation', label: 'Trò chuyện sâu sắc', emoji: '💬' },
+                { id: 'atmosphere', label: 'Không khí tốt', emoji: '✨' },
+                { id: 'steps_clear', label: 'Hướng dẫn rõ ràng', emoji: '📝' },
+                { id: 'bonding', label: 'Tăng kết nối', emoji: '💕' },
               ].map(item => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => toggleWorked(item.id)}
-                  className={`p-3 rounded-xl border-2 text-sm transition-all ${
+                  className={`p-3 rounded-[18px] border-3 text-sm transition-all ${
                     whatWorked.includes(item.id)
-                      ? 'border-[#C4612F] bg-[#F2E3D6]'
-                      : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                      ? 'border-green-400 bg-bubble-green shadow-bubble-md'
+                      : 'border-transparent bg-white hover:border-green-200 hover:shadow-bubble'
                   }`}
                 >
-                  {item.label}
+                  <span className="mr-1">{item.emoji}</span>
+                  <span className="font-semibold">{item.label}</span>
                 </button>
               ))}
             </div>
@@ -151,30 +157,31 @@ function FeedbackForm() {
 
           {/* What Didn't Work */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
-              Điều gì chưa tốt?
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-2">
+              Điều gì chưa tốt? 👎
             </h3>
-            <p className="text-sm font-light text-[#5C635D] mb-3">Giúp chúng tôi cải thiện</p>
+            <p className="text-sm font-light text-gray-600 mb-4">Giúp chúng tôi cải thiện</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { id: 'too_long', label: 'Quá dài' },
-                { id: 'too_expensive', label: 'Quá tốn kém' },
-                { id: 'uncomfortable', label: 'Không thoải mái' },
-                { id: 'bad_timing', label: 'Thời điểm không phù hợp' },
-                { id: 'unclear_steps', label: 'Hướng dẫn chưa rõ' },
-                { id: 'didnt_enjoy', label: 'Không thích' },
+                { id: 'too_long', label: 'Quá dài', emoji: '⏳' },
+                { id: 'too_expensive', label: 'Quá tốn kém', emoji: '💸' },
+                { id: 'uncomfortable', label: 'Không thoải mái', emoji: '😣' },
+                { id: 'bad_timing', label: 'Thời điểm không hợp', emoji: '⏰' },
+                { id: 'unclear_steps', label: 'Hướng dẫn chưa rõ', emoji: '❓' },
+                { id: 'didnt_enjoy', label: 'Không thích', emoji: '😕' },
               ].map(item => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => toggleDidntWork(item.id)}
-                  className={`p-3 rounded-xl border-2 text-sm transition-all ${
+                  className={`p-3 rounded-[18px] border-3 text-sm transition-all ${
                     whatDidntWork.includes(item.id)
-                      ? 'border-[#C4612F] bg-[#F2E3D6]'
-                      : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                      ? 'border-red-400 bg-red-50 shadow-bubble-md'
+                      : 'border-transparent bg-white hover:border-red-200 hover:shadow-bubble'
                   }`}
                 >
-                  {item.label}
+                  <span className="mr-1">{item.emoji}</span>
+                  <span className="font-semibold">{item.label}</span>
                 </button>
               ))}
             </div>
@@ -182,27 +189,28 @@ function FeedbackForm() {
 
           {/* Partner Reaction */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
-              Phản ứng của người ấy?
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-4">
+              Phản ứng của người ấy? 💑
             </h3>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { id: 'loved_it', label: '💖 Rất thích' },
-                { id: 'enjoyed', label: '😊 Thích' },
-                { id: 'neutral', label: '😐 Bình thường' },
-                { id: 'uncomfortable', label: '😕 Không thoải mái' },
+                { id: 'loved_it', label: 'Rất thích', emoji: '💖' },
+                { id: 'enjoyed', label: 'Thích', emoji: '😊' },
+                { id: 'neutral', label: 'Bình thường', emoji: '😐' },
+                { id: 'uncomfortable', label: 'Không thoải mái', emoji: '😕' },
               ].map(item => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setPartnerReaction(item.id)}
-                  className={`p-3 rounded-xl border-2 transition-all ${
+                  className={`p-4 rounded-[20px] border-3 transition-all text-center ${
                     partnerReaction === item.id
-                      ? 'border-[#C4612F] bg-[#F2E3D6]'
-                      : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                      ? 'border-primary bg-gradient-to-br from-pink-50 to-purple-50 shadow-bubble-lg'
+                      : 'border-transparent bg-white hover:border-pink-200 hover:shadow-bubble'
                   }`}
                 >
-                  {item.label}
+                  <div className="text-3xl mb-1">{item.emoji}</div>
+                  <div className="text-sm font-semibold">{item.label}</div>
                 </button>
               ))}
             </div>
@@ -210,63 +218,63 @@ function FeedbackForm() {
 
           {/* Would Repeat */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-4">
               Bạn có muốn làm lại hoạt động này không? *
             </h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setWouldRepeat(true)}
-                className={`p-4 rounded-xl border-2 transition-all ${
+                className={`p-5 rounded-[24px] border-3 transition-all ${
                   wouldRepeat === true
-                    ? 'border-[#C4612F] bg-[#F2E3D6]'
-                    : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                    ? 'border-green-400 bg-bubble-green shadow-bubble-lg scale-105'
+                    : 'border-transparent bg-white hover:border-green-200 hover:shadow-bubble'
                 }`}
               >
-                <div className="text-2xl mb-1">👍</div>
-                <div className="text-sm font-light">Có, chắc chắn</div>
+                <div className="text-4xl mb-2">👍</div>
+                <div className="text-sm font-semibold">Có, chắc chắn</div>
               </button>
               <button
                 type="button"
                 onClick={() => setWouldRepeat(false)}
-                className={`p-4 rounded-xl border-2 transition-all ${
+                className={`p-5 rounded-[24px] border-3 transition-all ${
                   wouldRepeat === false
-                    ? 'border-[#C4612F] bg-[#F2E3D6]'
-                    : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                    ? 'border-red-400 bg-red-50 shadow-bubble-lg scale-105'
+                    : 'border-transparent bg-white hover:border-red-200 hover:shadow-bubble'
                 }`}
               >
-                <div className="text-2xl mb-1">👎</div>
-                <div className="text-sm font-light">Không</div>
+                <div className="text-4xl mb-2">👎</div>
+                <div className="text-sm font-semibold">Không</div>
               </button>
             </div>
           </div>
 
           {/* Notes */}
           <div className="mb-8">
-            <h3 className="font-serif text-lg text-[#1F2421] mb-3">
-              Ghi chú thêm (tùy chọn)
+            <h3 className="font-heading text-lg font-semibold text-gray-800 mb-4">
+              Ghi chú thêm (tùy chọn) 📝
             </h3>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Chia sẻ thêm về trải nghiệm của bạn..."
               rows={4}
-              className="w-full px-4 py-3 border border-[#E7E1D7] rounded-xl font-light text-[#1F2421] placeholder:text-[#5C635D]/50 focus:outline-none focus:border-[#C4612F] transition-colors resize-none"
+              className="input-bubble resize-none"
             />
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-[20px]">
+              <p className="text-sm text-red-600 font-medium">⚠️ {error}</p>
             </div>
           )}
 
           <button
             onClick={handleSubmit}
             disabled={loading || !outcome || wouldRepeat === null}
-            className="w-full px-6 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all hover:translate-y-[-2px] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            className="btn-bubble btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
           >
-            {loading ? 'Đang gửi...' : 'Hoàn thành'}
+            {loading ? '✨ Đang gửi...' : '🎉 Hoàn thành'}
           </button>
         </div>
       </div>
