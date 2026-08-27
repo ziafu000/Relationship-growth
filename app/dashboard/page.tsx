@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { logout } from '@/app/actions/auth'
 
 export default async function DashboardPage({
   searchParams,
@@ -28,7 +29,7 @@ export default async function DashboardPage({
             <span className="text-sm font-light text-[#5C635D]">
               {user.email}
             </span>
-            <form action="/api/auth/logout" method="post">
+            <form action={logout}>
               <button
                 type="submit"
                 className="text-sm font-light text-[#C4612F] hover:text-[#A94E22] transition-colors"
