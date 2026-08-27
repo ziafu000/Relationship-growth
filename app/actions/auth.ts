@@ -31,7 +31,8 @@ export async function signup(formData: FormData) {
     options: {
       data: {
         name: formData.get('name') as string,
-      }
+      },
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback`
     }
   }
 
@@ -41,8 +42,8 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/onboarding')
+  // Don't redirect automatically - let the UI show "check email" message
+  return { success: true }
 }
 
 export async function logout() {

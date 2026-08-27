@@ -7,17 +7,73 @@ import Link from 'next/link'
 export default function SignupPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
     setError(null)
+
+    const email = formData.get('email') as string
+    setUserEmail(email)
 
     const result = await signup(formData)
 
     if (result?.error) {
       setError(result.error)
       setLoading(false)
+    } else {
+      // Signup successful - show check email message
+      setEmailSent(true)
+      setLoading(false)
     }
+  }
+
+  // Show "Check your email" screen after successful signup
+  if (emailSent) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center p-4">
+        {/* Floating Decorations */}
+        <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">💌</div>
+        <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>✨</div>
+        <div className="fixed top-40 left-1/4 text-4xl opacity-20 float-animation" style={{animationDelay: '2s'}}>💖</div>
+
+        <div className="w-full max-w-md">
+          <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 text-center">
+            <div className="text-6xl mb-4 emoji-bounce">📧</div>
+
+            <span className="badge-bubble badge-purple mb-4">
+              ✨ Xác nhận email
+            </span>
+
+            <h2 className="font-heading text-3xl font-bold text-gray-800 mt-4 mb-3">
+              Kiểm tra <span className="text-primary">email</span> của bạn!
+            </h2>
+
+            <p className="text-gray-600 font-light mb-2">
+              Chúng tôi đã gửi link xác nhận đến:
+            </p>
+            <p className="text-primary font-semibold mb-6">
+              {userEmail}
+            </p>
+
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-[20px] p-4 mb-6">
+              <p className="text-sm text-blue-800 font-light leading-relaxed">
+                📬 Click vào link trong email để kích hoạt tài khoản.
+                <br />Nếu không thấy email, hãy kiểm tra thư mục spam nhé!
+              </p>
+            </div>
+
+            <Link
+              href="/login"
+              className="btn-bubble btn-primary w-full inline-block"
+            >
+              🔐 Đi đến trang đăng nhập
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
