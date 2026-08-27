@@ -23,18 +23,18 @@ export default async function PlansViewPage({
 
   if (error || !plans || plans.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl p-8 border border-[#E7E1D7] max-w-md text-center">
-          <div className="text-4xl mb-4">😔</div>
-          <h2 className="font-serif text-2xl text-[#1F2421] mb-3">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4">
+        <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 max-w-md text-center">
+          <div className="text-4xl mb-4 emoji-bounce">😔</div>
+          <h2 className="font-heading text-2xl font-bold text-gray-800 mb-3">
             Không tìm thấy kế hoạch
           </h2>
-          <p className="text-[#5C635D] font-light mb-6">
+          <p className="text-gray-600 font-light mb-6">
             Vui lòng thử lại hoặc tạo check-in mới
           </p>
           <a
             href="/dashboard"
-            className="inline-block px-6 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all"
+            className="btn-bubble btn-primary inline-block"
           >
             Về Dashboard
           </a>
@@ -53,17 +53,21 @@ export default async function PlansViewPage({
   type Goal = { goal_description_vi?: string; [key: string]: any }
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF]">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">🎯</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>✨</div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#E7E1D7]">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b-2 border-pink-200">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-xl tracking-tight text-[#1F2421]">
-              Kế hoạch hành động
+            <h1 className="font-heading text-xl font-bold text-gray-800">
+              Kế hoạch hành động 🚀
             </h1>
             <a
               href="/dashboard"
-              className="text-sm font-light text-[#5C635D] hover:text-[#C4612F] transition-colors"
+              className="text-sm font-light text-gray-600 hover:text-primary transition-colors"
             >
               Về Dashboard
             </a>
@@ -74,13 +78,13 @@ export default async function PlansViewPage({
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Intro */}
         <div className="text-center mb-8">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-4">
-            3 lựa chọn dành riêng cho bạn
+          <span className="badge-bubble badge-pink mb-4">
+            🎁 3 lựa chọn dành riêng cho bạn
           </span>
-          <h2 className="font-serif text-3xl md:text-4xl tracking-tight text-[#1F2421] mb-3">
-            Chọn <span className="italic text-[#C4612F]">một kế hoạch</span> để bắt đầu
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-gray-800 mb-3 mt-4">
+            Chọn <span className="text-primary italic">một kế hoạch</span> để bắt đầu
           </h2>
-          <p className="text-[#5C635D] font-light max-w-2xl mx-auto">
+          <p className="text-gray-600 font-light max-w-2xl mx-auto">
             {(goal as Goal | null)?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
           </p>
         </div>
@@ -97,13 +101,13 @@ export default async function PlansViewPage({
         </div>
 
         {/* Footer CTA */}
-        <div className="text-center p-6 bg-white rounded-2xl border border-[#E7E1D7]">
-          <p className="text-sm font-light text-[#5C635D] mb-3">
+        <div className="bubble-card bg-gradient-to-br from-white to-purple-50/30 text-center">
+          <p className="text-sm font-light text-gray-600 mb-3">
             Không thấy kế hoạch phù hợp?
           </p>
           <a
             href="/check-in"
-            className="inline-block px-6 py-2 border border-[#E7E1D7] text-[#5C635D] rounded-full font-light hover:border-[#C4612F] hover:text-[#C4612F] transition-all text-sm"
+            className="btn-bubble bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:bg-white inline-block"
           >
             Làm check-in mới
           </a>

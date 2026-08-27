@@ -42,30 +42,34 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
   const allStepsCompleted = steps.length > 0 && completedSteps.length === steps.length
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF]">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">🌟</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>💪</div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#E7E1D7]">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b-2 border-green-200">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="font-serif text-xl tracking-tight text-[#1F2421]">
-              Đang thực hiện
+            <h1 className="font-heading text-xl font-bold text-gray-800">
+              Đang thực hiện 🚀
             </h1>
             <button
               onClick={() => setShowAbandonDialog(true)}
-              className="text-sm font-light text-[#5C635D] hover:text-[#C4612F] transition-colors"
+              className="text-sm font-light text-gray-600 hover:text-primary transition-colors"
             >
               Thoát
             </button>
           </div>
           {/* Progress Bar */}
           <div className="mt-3">
-            <div className="flex items-center justify-between text-xs font-light text-[#5C635D] mb-1">
+            <div className="flex items-center justify-between text-xs font-light text-gray-600 mb-1">
               <span>Tiến độ</span>
               <span>{completedSteps.length} / {steps.length} bước</span>
             </div>
-            <div className="h-1.5 bg-[#E7E1D7] rounded-full overflow-hidden">
+            <div className="h-2 bg-white/50 rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#C4612F] transition-all duration-300"
+                className="h-full bg-gradient-to-r from-primary to-accent-purple transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -75,22 +79,22 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         {/* Title Card */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E7E1D7] mb-6">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-3">
-            {plan.estimated_time_minutes ? `${plan.estimated_time_minutes} phút` : 'Hoạt động'}
+        <div className="bubble-card bg-gradient-to-br from-white to-green-50/30 mb-6">
+          <span className="badge-bubble badge-green mb-3">
+            ⏱️ {plan.estimated_time_minutes ? `${plan.estimated_time_minutes} phút` : 'Hoạt động'}
           </span>
-          <h2 className="font-serif text-3xl tracking-tight text-[#1F2421] mb-3">
+          <h2 className="font-heading text-3xl font-bold text-gray-800 mb-3">
             {plan.plan_title_vi}
           </h2>
-          <p className="text-[#5C635D] font-light">
+          <p className="text-gray-600 font-light">
             {plan.reasoning_vi}
           </p>
         </div>
 
         {/* Steps */}
         {steps.length > 0 && (
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E7E1D7] mb-6">
-            <h3 className="font-serif text-xl text-[#1F2421] mb-6">Các bước thực hiện</h3>
+          <div className="bubble-card bg-gradient-to-br from-white to-blue-50/30 mb-6">
+            <h3 className="font-heading text-xl font-bold text-gray-800 mb-6">Các bước thực hiện</h3>
             <div className="space-y-4">
               {steps.map((step: any, index: number) => {
                 const stepOrder = step.order || index + 1
@@ -100,21 +104,21 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
                   <button
                     key={index}
                     onClick={() => handleStepToggle(stepOrder)}
-                    className={`w-full flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all ${
+                    className={`w-full flex items-start gap-4 p-4 rounded-[20px] border-2 text-left transition-all ${
                       isCompleted
-                        ? 'border-[#C4612F] bg-[#F2E3D6]'
-                        : 'border-[#E7E1D7] bg-white hover:border-[#C4612F]/30'
+                        ? 'border-primary bg-bubble-green shadow-bubble'
+                        : 'border-green-200 bg-white hover:border-primary/50 hover:shadow-bubble-md'
                     }`}
                   >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all font-bold ${
                       isCompleted
-                        ? 'bg-[#C4612F] text-white'
-                        : 'bg-[#E7E1D7] text-[#5C635D]'
+                        ? 'bg-primary text-white'
+                        : 'bg-green-100 text-gray-600'
                     }`}>
                       {isCompleted ? '✓' : stepOrder}
                     </div>
                     <div className="flex-1 pt-1">
-                      <p className={`font-light ${isCompleted ? 'text-[#1F2421]' : 'text-[#5C635D]'}`}>
+                      <p className={`font-light ${isCompleted ? 'text-gray-800 line-through opacity-70' : 'text-gray-700'}`}>
                         {step.instruction_vi}
                       </p>
                     </div>
@@ -127,12 +131,12 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
 
         {/* Conversation Starters */}
         {conversationStarters.length > 0 && (
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E7E1D7] mb-6">
-            <h3 className="font-serif text-xl text-[#1F2421] mb-4">💬 Câu hỏi gợi ý</h3>
+          <div className="bubble-card bg-gradient-to-br from-white to-purple-50/30 mb-6">
+            <h3 className="font-heading text-xl font-bold text-gray-800 mb-4">💬 Câu hỏi gợi ý</h3>
             <div className="space-y-3">
               {conversationStarters.map((prompt: any, index: number) => (
-                <div key={index} className="p-4 bg-[#F7F4EF] rounded-xl">
-                  <p className="font-light text-[#5C635D]">{prompt.prompt_vi}</p>
+                <div key={index} className="p-4 bg-purple-50 border-2 border-purple-200 rounded-[20px]">
+                  <p className="font-light text-purple-800">{prompt.prompt_vi}</p>
                 </div>
               ))}
             </div>
@@ -141,15 +145,15 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
 
         {/* Tips */}
         {tips && (tips.do || tips.dont) && (
-          <div className="bg-white rounded-3xl p-6 md:p-8 border border-[#E7E1D7] mb-6">
-            <h3 className="font-serif text-xl text-[#1F2421] mb-4">💡 Lưu ý</h3>
+          <div className="bubble-card bg-gradient-to-br from-white to-yellow-50/30 mb-6">
+            <h3 className="font-heading text-xl font-bold text-gray-800 mb-4">💡 Lưu ý</h3>
 
             {tips.do && Array.isArray(tips.do) && tips.do.length > 0 && (
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-green-700 mb-2">✓ Nên làm:</h4>
+                <h4 className="text-sm font-semibold text-green-700 mb-2">✓ Nên làm:</h4>
                 <ul className="space-y-1">
                   {tips.do.map((tip: string, index: number) => (
-                    <li key={index} className="text-sm font-light text-[#5C635D] pl-4">
+                    <li key={index} className="text-sm font-light text-gray-700 pl-4">
                       • {tip}
                     </li>
                   ))}
@@ -159,10 +163,10 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
 
             {tips.dont && Array.isArray(tips.dont) && tips.dont.length > 0 && (
               <div>
-                <h4 className="text-sm font-medium text-red-700 mb-2">✗ Không nên:</h4>
+                <h4 className="text-sm font-semibold text-red-700 mb-2">✗ Không nên:</h4>
                 <ul className="space-y-1">
                   {tips.dont.map((tip: string, index: number) => (
-                    <li key={index} className="text-sm font-light text-[#5C635D] pl-4">
+                    <li key={index} className="text-sm font-light text-gray-700 pl-4">
                       • {tip}
                     </li>
                   ))}
@@ -173,30 +177,30 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
         )}
 
         {/* Complete Button */}
-        <div className="bg-white rounded-3xl p-6 border border-[#E7E1D7]">
+        <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30">
           {allStepsCompleted ? (
             <>
               <div className="text-center mb-4">
-                <div className="text-4xl mb-2">🎉</div>
-                <p className="text-lg font-serif text-[#1F2421] mb-2">Hoàn thành!</p>
-                <p className="text-sm font-light text-[#5C635D]">
+                <div className="text-5xl mb-3 emoji-bounce">🎉</div>
+                <p className="font-heading text-2xl font-bold text-gray-800 mb-2">Hoàn thành!</p>
+                <p className="text-sm font-light text-gray-600">
                   Chia sẻ trải nghiệm để nhận đề xuất tốt hơn lần sau
                 </p>
               </div>
               <button
                 onClick={handleComplete}
                 disabled={loading}
-                className="w-full px-6 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all hover:translate-y-[-2px] disabled:opacity-50"
+                className="btn-bubble btn-primary w-full"
               >
-                {loading ? 'Đang xử lý...' : 'Gửi feedback'}
+                {loading ? 'Đang xử lý...' : '💌 Gửi feedback'}
               </button>
             </>
           ) : (
             <div className="text-center">
-              <p className="text-sm font-light text-[#5C635D] mb-3">
+              <p className="text-sm font-light text-gray-600 mb-3">
                 Hoàn thành tất cả các bước để tiếp tục
               </p>
-              <div className="text-2xl text-[#E7E1D7]">⬆️</div>
+              <div className="text-2xl text-gray-300">⬆️</div>
             </div>
           )}
         </div>
@@ -204,25 +208,25 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
 
       {/* Abandon Dialog */}
       {showAbandonDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full">
-            <h3 className="font-serif text-xl text-[#1F2421] mb-3">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
+          <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 max-w-md w-full">
+            <h3 className="font-heading text-xl font-bold text-gray-800 mb-3">
               Bạn có chắc muốn thoát?
             </h3>
-            <p className="text-sm font-light text-[#5C635D] mb-6">
+            <p className="text-sm font-light text-gray-600 mb-6">
               Tiến độ của bạn sẽ không được lưu
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowAbandonDialog(false)}
-                className="flex-1 px-4 py-2 border border-[#E7E1D7] text-[#5C635D] rounded-full font-light"
+                className="btn-bubble bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:bg-white flex-1"
               >
                 Tiếp tục
               </button>
               <button
                 onClick={handleAbandon}
                 disabled={loading}
-                className="flex-1 px-4 py-2 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all disabled:opacity-50"
+                className="btn-bubble btn-primary flex-1"
               >
                 Thoát
               </button>

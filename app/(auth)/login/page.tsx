@@ -21,30 +21,35 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">💖</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>✨</div>
+      <div className="fixed top-40 left-1/4 text-4xl opacity-20 float-animation" style={{animationDelay: '2s'}}>🔐</div>
+
       <div className="w-full max-w-md">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <h1 className="font-serif text-4xl tracking-tight text-[#1F2421] mb-2">
-            Relationship <span className="italic text-[#C4612F]">Growth</span> OS
+          <h1 className="font-heading text-4xl font-bold text-gray-800 mb-2">
+            Relationship <span className="text-primary italic">Growth</span> OS
           </h1>
-          <p className="text-[#5C635D] font-light">Nuôi dưỡng mối quan hệ từng ngày</p>
+          <p className="text-gray-600 font-light">Nuôi dưỡng mối quan hệ từng ngày 💕</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E7E1D7] p-8">
+        <div className="bubble-card bg-gradient-to-br from-white to-blue-50/30">
           <div className="mb-6">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-3">
-              Đăng nhập
+            <span className="badge-bubble badge-blue mb-3">
+              🔐 Đăng nhập
             </span>
-            <h2 className="font-serif text-2xl text-[#1F2421] tracking-tight">
-              Chào mừng trở lại
+            <h2 className="font-heading text-3xl font-bold text-gray-800 mt-4 mb-3">
+              Chào mừng <span className="text-primary">trở lại</span>!
             </h2>
           </div>
 
           <form action={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-light text-[#5C635D] mb-1.5">
+              <label htmlFor="email" className="block text-sm font-light text-gray-600 mb-1.5">
                 Email
               </label>
               <input
@@ -52,16 +57,13 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 required
-                className="w-full px-4 py-2.5 rounded-full border border-[#E7E1D7] bg-[#FBF9F5]
-                         text-[#1F2421] font-light
-                         focus:outline-none focus:ring-2 focus:ring-[#C4612F] focus:border-transparent
-                         transition-all"
+                className="input-bubble"
                 placeholder="example@email.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-light text-[#5C635D] mb-1.5">
+              <label htmlFor="password" className="block text-sm font-light text-gray-600 mb-1.5">
                 Mật khẩu
               </label>
               <input
@@ -69,16 +71,13 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 required
-                className="w-full px-4 py-2.5 rounded-full border border-[#E7E1D7] bg-[#FBF9F5]
-                         text-[#1F2421] font-light
-                         focus:outline-none focus:ring-2 focus:ring-[#C4612F] focus:border-transparent
-                         transition-all"
+                className="input-bubble"
                 placeholder="••••••••"
               />
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm font-light">
+              <div className="p-3 rounded-[20px] bg-red-50 border-2 border-red-200 text-red-700 text-sm font-light">
                 {error}
               </div>
             )}
@@ -86,20 +85,18 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#C4612F] hover:bg-[#A94E22] text-white font-normal py-3 rounded-full
-                       transition-all duration-200 hover:shadow-md hover:translate-y-[-2px]
-                       disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              className="btn-bubble btn-primary w-full"
             >
-              {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+              {loading ? 'Đang đăng nhập...' : '✨ Đăng nhập'}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm font-light text-[#5C635D]">
+            <p className="text-sm font-light text-gray-600">
               Chưa có tài khoản?{' '}
               <Link
                 href="/signup"
-                className="text-[#C4612F] hover:text-[#A94E22] font-normal transition-colors"
+                className="text-primary hover:text-primary-dark font-normal transition-colors"
               >
                 Đăng ký ngay
               </Link>
@@ -108,8 +105,8 @@ export default function LoginPage() {
         </div>
 
         {/* Footer note */}
-        <p className="text-center text-xs font-light text-[#5C635D] mt-6">
-          Dành cho các cặp đôi tại Hà Nội & TP. Hồ Chí Minh
+        <p className="text-center text-xs font-light text-gray-600 mt-6">
+          Dành cho các cặp đôi tại Hà Nội & TP. Hồ Chí Minh 🌆
         </p>
       </div>
     </div>

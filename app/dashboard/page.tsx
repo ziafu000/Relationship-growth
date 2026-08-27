@@ -18,21 +18,25 @@ export default async function DashboardPage({
   const feedbackSubmitted = searchParams.feedback_submitted === 'true'
 
   return (
-    <div className="min-h-screen bg-[#F7F4EF]">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
+      {/* Floating Decorations */}
+      <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">💕</div>
+      <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>🌟</div>
+
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-[#E7E1D7]">
+      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b-2 border-pink-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="font-serif text-xl tracking-tight text-[#1F2421]">
-            Relationship <span className="italic text-[#C4612F]">Growth</span>
+          <h1 className="font-heading text-xl font-bold text-gray-800">
+            Relationship <span className="text-primary italic">Growth</span>
           </h1>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-light text-[#5C635D]">
+            <span className="text-sm font-light text-gray-600">
               {user.email}
             </span>
             <form action={logout}>
               <button
                 type="submit"
-                className="text-sm font-light text-[#C4612F] hover:text-[#A94E22] transition-colors"
+                className="text-sm font-light text-primary hover:text-pink-600 transition-colors"
               >
                 Đăng xuất
               </button>
@@ -45,11 +49,11 @@ export default async function DashboardPage({
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Success Message */}
         {feedbackSubmitted && (
-          <div className="mb-8 bg-green-50 border border-green-200 rounded-2xl p-6">
+          <div className="mb-8 bg-green-50 border-2 border-green-200 rounded-[24px] p-6">
             <div className="flex items-start gap-3">
-              <div className="text-2xl">🎉</div>
+              <div className="text-2xl emoji-bounce">🎉</div>
               <div>
-                <h3 className="font-serif text-lg text-green-900 mb-1">
+                <h3 className="font-heading text-lg font-bold text-green-900 mb-1">
                   Cảm ơn bạn đã chia sẻ!
                 </h3>
                 <p className="text-sm font-light text-green-800">
@@ -61,21 +65,21 @@ export default async function DashboardPage({
         )}
 
         <div className="text-center py-16">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F2E3D6] text-[#C4612F] text-xs font-medium mb-4">
-            Chào mừng
+          <span className="badge-bubble badge-pink mb-4">
+            💕 Chào mừng
           </span>
-          <h2 className="font-serif text-4xl tracking-tight text-[#1F2421] mb-4">
-            Chào mừng trở lại, <span className="italic text-[#C4612F]">{user.user_metadata?.name || 'bạn'}</span>!
+          <h2 className="font-heading text-4xl font-bold text-gray-800 mb-4 mt-4">
+            Chào mừng trở lại, <span className="text-primary italic">{user.user_metadata?.name || 'bạn'}</span>!
           </h2>
-          <p className="text-[#5C635D] font-light max-w-xl mx-auto mb-8">
+          <p className="text-gray-600 font-light max-w-xl mx-auto mb-8">
             Sẵn sàng nuôi dưỡng mối quan hệ của bạn hôm nay chưa?
           </p>
 
           <a
             href="/check-in"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all hover:translate-y-[-2px]"
+            className="btn-bubble btn-primary inline-flex items-center gap-2"
           >
-            Bắt đầu Check-in
+            ✨ Bắt đầu Check-in
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -83,38 +87,38 @@ export default async function DashboardPage({
 
           {/* Next Steps Preview */}
           <div className="max-w-2xl mx-auto mt-12 grid gap-4">
-            <div className="bg-white rounded-2xl p-6 border border-[#E7E1D7] text-left">
+            <div className="bubble-card bg-gradient-to-br from-white to-green-50/30 text-left">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-[#F2E3D6] flex items-center justify-center text-[#C4612F] font-medium text-sm">
+                <div className="w-8 h-8 rounded-full bg-bubble-green flex items-center justify-center text-primary font-bold text-sm">
                   ✓
                 </div>
-                <h3 className="font-serif text-lg text-[#1F2421]">Onboarding</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-800">Onboarding</h3>
               </div>
-              <p className="text-sm font-light text-[#5C635D] ml-11">
+              <p className="text-sm font-light text-gray-600 ml-11">
                 Đã hoàn thành thiết lập
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-[#E7E1D7] text-left">
+            <div className="bubble-card bg-gradient-to-br from-white to-blue-50/30 text-left">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-[#F2E3D6] flex items-center justify-center text-[#C4612F] font-medium text-sm">
+                <div className="w-8 h-8 rounded-full bg-bubble-blue flex items-center justify-center text-primary font-bold text-sm">
                   1
                 </div>
-                <h3 className="font-serif text-lg text-[#1F2421]">Check-in</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-800">Check-in</h3>
               </div>
-              <p className="text-sm font-light text-[#5C635D] ml-11">
+              <p className="text-sm font-light text-gray-600 ml-11">
                 Chia sẻ tâm trạng và mức độ kết nối hiện tại
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-[#E7E1D7] text-left opacity-50">
+            <div className="bubble-card bg-gradient-to-br from-white to-purple-50/30 text-left opacity-50">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-full bg-[#F2E3D6] flex items-center justify-center text-[#C4612F] font-medium text-sm">
+                <div className="w-8 h-8 rounded-full bg-bubble-purple flex items-center justify-center text-primary font-bold text-sm">
                   2
                 </div>
-                <h3 className="font-serif text-lg text-[#1F2421]">Growth Plans</h3>
+                <h3 className="font-heading text-lg font-bold text-gray-800">Growth Plans</h3>
               </div>
-              <p className="text-sm font-light text-[#5C635D] ml-11">
+              <p className="text-sm font-light text-gray-600 ml-11">
                 Nhận 3 kế hoạch hành động được cá nhân hóa
               </p>
             </div>

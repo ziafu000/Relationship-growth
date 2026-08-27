@@ -37,19 +37,19 @@ export default async function PlansPage({
 
   if (result.error) {
     return (
-      <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center px-4">
-        <div className="bg-white rounded-3xl p-8 border border-[#E7E1D7] max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4">
+        <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 max-w-md">
           <div className="text-center">
-            <div className="text-4xl mb-4">😔</div>
-            <h2 className="font-serif text-2xl text-[#1F2421] mb-3">
+            <div className="text-4xl mb-4 emoji-bounce">😔</div>
+            <h2 className="font-heading text-2xl font-bold text-gray-800 mb-3">
               Có lỗi xảy ra
             </h2>
-            <p className="text-[#5C635D] font-light mb-6">
+            <p className="text-gray-600 font-light mb-6">
               {result.error}
             </p>
             <a
               href="/dashboard"
-              className="inline-block px-6 py-3 bg-[#C4612F] text-white rounded-full font-light hover:bg-[#A94E22] transition-all"
+              className="btn-bubble btn-primary inline-block"
             >
               Về Dashboard
             </a>
