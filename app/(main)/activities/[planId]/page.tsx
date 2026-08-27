@@ -56,8 +56,8 @@ export default async function ActivityPage({
         </div>
       )
     }
-    execution = result.execution
+    execution = result.execution || null
   }
 
-  return <ActivityView plan={plan} execution={execution} />
+  return <ActivityView plan={plan as any} execution={execution as any} />
 }

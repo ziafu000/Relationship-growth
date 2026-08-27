@@ -20,11 +20,13 @@ export async function createRelationship(formData: FormData) {
   const loveLanguages = formData.getAll('love_languages') as string[]
   const interests = formData.getAll('interests') as string[]
 
+  type Relationship = { id: string; [key: string]: any }
+
   // Create relationship
   const { data: relationship, error: relationshipError } = await supabase
     .from('relationships')
     .insert({
-      relationship_type: relationshipType,
+      relationship_type: relationshipType as 'new' | 'long_term',
       mode: 'solo',
       status: 'active'
     })
@@ -40,7 +42,7 @@ export async function createRelationship(formData: FormData) {
   const { error: memberError } = await supabase
     .from('relationship_members')
     .insert({
-      relationship_id: relationship.id,
+      relationship_id: (relationship as Relationship).id,
       user_id: user.id,
       role: 'owner',
       joined_at: new Date().toISOString()
@@ -55,7 +57,7 @@ export async function createRelationship(formData: FormData) {
   const { error: passportError } = await supabase
     .from('relationship_passports')
     .insert({
-      relationship_id: relationship.id,
+      relationship_id: (relationship as Relationship).id,
       partner1_love_languages: loveLanguages,
       partner1_interests: interests
     })
@@ -68,7 +70,7 @@ export async function createRelationship(formData: FormData) {
   // Update user city
   const { error: updateError } = await supabase
     .from('users')
-    .update({ city })
+    .update({ city: city })
     .eq('id', user.id)
 
   if (updateError) {

@@ -13,6 +13,8 @@ export async function startPlanExecution(planId: string) {
     return { error: 'Không tìm thấy user.' }
   }
 
+  type Plan = { relationship_id: string; [key: string]: any }
+
   // Get plan details
   const { data: plan, error: planError } = await supabase
     .from('plans')
@@ -29,7 +31,7 @@ export async function startPlanExecution(planId: string) {
     .from('plan_executions')
     .insert({
       plan_id: planId,
-      relationship_id: plan.relationship_id,
+      relationship_id: (plan as Plan).relationship_id,
       user_id: user.id,
       status: 'started',
       started_at: new Date().toISOString(),
@@ -49,6 +51,8 @@ export async function startPlanExecution(planId: string) {
 export async function completeStep(executionId: string, stepOrder: number) {
   const supabase = await createClient()
 
+  type Execution = { steps_completed: any[]; [key: string]: any }
+
   // Get current execution
   const { data: execution } = await supabase
     .from('plan_executions')
@@ -60,7 +64,7 @@ export async function completeStep(executionId: string, stepOrder: number) {
     return { error: 'Không tìm thấy execution.' }
   }
 
-  const stepsCompleted = execution.steps_completed || []
+  const stepsCompleted = (execution as Execution).steps_completed || []
   const newStep = {
     step_id: stepOrder,
     completed_at: new Date().toISOString()
@@ -70,7 +74,7 @@ export async function completeStep(executionId: string, stepOrder: number) {
     .from('plan_executions')
     .update({
       steps_completed: [...stepsCompleted, newStep]
-    })
+    } as any)
     .eq('id', executionId)
 
   if (error) {
@@ -89,7 +93,7 @@ export async function completePlanExecution(executionId: string) {
     .update({
       status: 'completed',
       completed_at: new Date().toISOString()
-    })
+    } as any)
     .eq('id', executionId)
 
   if (error) {
@@ -109,7 +113,7 @@ export async function abandonPlanExecution(executionId: string) {
     .update({
       status: 'abandoned',
       abandoned_at: new Date().toISOString()
-    })
+    } as any)
     .eq('id', executionId)
 
   if (error) {

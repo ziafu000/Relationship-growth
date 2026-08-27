@@ -14,6 +14,14 @@ export async function createPlans(goalId: string) {
     return { error: 'Không tìm thấy user.' }
   }
 
+  type Goal = {
+    relationship_id: string
+    goal_type: string
+    check_ins: any
+    relationships: { relationship_type: string }
+    [key: string]: any
+  }
+
   // Get goal details
   const { data: goal, error: goalError } = await supabase
     .from('goals')
@@ -29,7 +37,7 @@ export async function createPlans(goalId: string) {
   const { data: passport } = await supabase
     .from('relationship_passports')
     .select('*')
-    .eq('relationship_id', goal.relationship_id)
+    .eq('relationship_id', (goal as Goal).relationship_id)
     .single()
 
   // Get user's city
@@ -41,16 +49,16 @@ export async function createPlans(goalId: string) {
 
   // Generate plans using the engine
   const generatedPlans = await generatePlans({
-    goalType: goal.goal_type,
-    checkIn: goal.check_ins,
+    goalType: (goal as Goal).goal_type,
+    checkIn: (goal as Goal).check_ins,
     passport: passport,
-    relationshipType: goal.relationships.relationship_type,
+    relationshipType: (goal as Goal).relationships.relationship_type,
     city: userData?.city || null
   })
 
   // Save plans to database
   const plansToInsert = generatedPlans.map(plan => ({
-    relationship_id: goal.relationship_id,
+    relationship_id: (goal as Goal).relationship_id,
     goal_id: goalId,
     user_id: user.id,
     plan_title_vi: plan.plan_title_vi,
@@ -68,7 +76,7 @@ export async function createPlans(goalId: string) {
 
   const { data: savedPlans, error: saveError } = await supabase
     .from('plans')
-    .insert(plansToInsert)
+    .insert(plansToInsert as any)
     .select()
 
   if (saveError) {
@@ -87,7 +95,7 @@ export async function selectPlan(planId: string) {
     .update({
       selected_at: new Date().toISOString(),
       viewed_at: new Date().toISOString()
-    })
+    } as any)
     .eq('id', planId)
 
   if (error) {
@@ -107,7 +115,7 @@ export async function rejectPlan(planId: string, reason: string) {
     .update({
       rejected_at: new Date().toISOString(),
       rejection_reason: reason
-    })
+    } as any)
     .eq('id', planId)
 
   if (error) {
@@ -123,7 +131,7 @@ export async function markPlanViewed(planId: string) {
 
   const { error } = await supabase
     .from('plans')
-    .update({ viewed_at: new Date().toISOString() })
+    .update({ viewed_at: new Date().toISOString() } as any)
     .eq('id', planId)
 
   if (error) {

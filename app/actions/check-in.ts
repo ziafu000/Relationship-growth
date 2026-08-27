@@ -25,6 +25,10 @@ export async function submitCheckIn(formData: FormData) {
     return { error: 'Không tìm thấy relationship. Vui lòng hoàn thành onboarding.' }
   }
 
+  type RelationshipMember = {
+    relationship_id: string
+  }
+
   // Get form data
   const currentMood = formData.get('current_mood') as string
   const connectionLevel = parseInt(formData.get('connection_level') as string)
@@ -39,7 +43,7 @@ export async function submitCheckIn(formData: FormData) {
   const { data: checkIn, error: checkInError } = await supabase
     .from('check_ins')
     .insert({
-      relationship_id: member.relationship_id,
+      relationship_id: (member as RelationshipMember).relationship_id,
       user_id: user.id,
       current_mood: currentMood,
       connection_level: connectionLevel,
@@ -59,8 +63,10 @@ export async function submitCheckIn(formData: FormData) {
     return { error: 'Không thể lưu check-in. Vui lòng thử lại.' }
   }
 
+  type CheckIn = { id: string; [key: string]: any }
+
   revalidatePath('/', 'layout')
-  redirect(`/goals?check_in_id=${checkIn.id}`)
+  redirect(`/goals?check_in_id=${(checkIn as CheckIn).id}`)
 }
 
 export async function getLatestCheckIn() {
@@ -68,6 +74,8 @@ export async function getLatestCheckIn() {
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
+
+  type RelationshipMember = { relationship_id: string }
 
   const { data: member } = await supabase
     .from('relationship_members')
@@ -80,7 +88,7 @@ export async function getLatestCheckIn() {
   const { data: checkIn } = await supabase
     .from('check_ins')
     .select('*')
-    .eq('relationship_id', member.relationship_id)
+    .eq('relationship_id', (member as RelationshipMember).relationship_id)
     .order('completed_at', { ascending: false })
     .limit(1)
     .single()

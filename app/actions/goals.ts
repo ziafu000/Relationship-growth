@@ -13,6 +13,8 @@ export async function selectGoal(formData: FormData) {
     return { error: 'Không tìm thấy user. Vui lòng đăng nhập lại.' }
   }
 
+  type RelationshipMember = { relationship_id: string }
+
   const { data: member } = await supabase
     .from('relationship_members')
     .select('relationship_id')
@@ -27,10 +29,12 @@ export async function selectGoal(formData: FormData) {
   const goalType = formData.get('goal_type') as string
   const goalDescription = formData.get('goal_description') as string
 
+  type Goal = { id: string; [key: string]: any }
+
   const { data: goal, error: goalError } = await supabase
     .from('goals')
     .insert({
-      relationship_id: member.relationship_id,
+      relationship_id: (member as RelationshipMember).relationship_id,
       check_in_id: checkInId,
       goal_type: goalType,
       goal_description_vi: goalDescription,
@@ -45,5 +49,5 @@ export async function selectGoal(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect(`/plans?goal_id=${goal.id}`)
+  redirect(`/plans?goal_id=${(goal as Goal).id}`)
 }

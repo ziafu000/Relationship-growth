@@ -21,6 +21,8 @@ export async function submitFeedback(formData: FormData) {
   const wouldRepeat = formData.get('would_repeat') === 'true'
   const notes = formData.get('notes') as string
 
+  type Execution = { relationship_id: string; [key: string]: any }
+
   // Get execution details
   const { data: execution, error: execError } = await supabase
     .from('plan_executions')
@@ -37,7 +39,7 @@ export async function submitFeedback(formData: FormData) {
     .from('feedback')
     .insert({
       plan_execution_id: executionId,
-      relationship_id: execution.relationship_id,
+      relationship_id: (execution as Execution).relationship_id,
       user_id: user.id,
       outcome,
       what_worked: whatWorked,
@@ -46,7 +48,7 @@ export async function submitFeedback(formData: FormData) {
       would_repeat: wouldRepeat,
       notes,
       submitted_at: new Date().toISOString()
-    })
+    } as any)
 
   if (feedbackError) {
     console.error('Feedback error:', feedbackError)

@@ -50,6 +50,8 @@ export default async function PlansViewPage({
     .eq('id', params.goalId)
     .single()
 
+  type Goal = { goal_description_vi?: string; [key: string]: any }
+
   return (
     <div className="min-h-screen bg-[#F7F4EF]">
       {/* Header */}
@@ -79,15 +81,15 @@ export default async function PlansViewPage({
             Chọn <span className="italic text-[#C4612F]">một kế hoạch</span> để bắt đầu
           </h2>
           <p className="text-[#5C635D] font-light max-w-2xl mx-auto">
-            {goal?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
+            {(goal as Goal)?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
           </p>
         </div>
 
         {/* Plans Grid */}
         <div className="grid gap-6 mb-8">
-          {plans.map((plan, index) => (
+          {plans.map((plan: any, index: number) => (
             <PlanCard
-              key={plan.id}
+              key={(plan as any).id}
               plan={plan}
               isActive={index === 0}
             />
