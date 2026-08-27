@@ -23,8 +23,12 @@ const config: Config = {
           DEFAULT: '#FF6B9D',
           dark: '#FF5285',
         },
-        secondary: '#FFB347',
-        accent: '#C77DFF',
+        secondary: '#A78BFA',
+        accent: {
+          DEFAULT: '#C77DFF',
+          purple: '#C77DFF',
+          blue: '#60A5FA',
+        },
       },
       fontFamily: {
         heading: ['Fredoka', 'system-ui', 'sans-serif'],

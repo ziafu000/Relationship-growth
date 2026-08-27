@@ -17,8 +17,9 @@
     /* Primary Colors */
     --color-primary: #FF6B9D;
     --color-primary-dark: #FF5285;
-    --color-secondary: #FFB347;
+    --color-secondary: #A78BFA;
     --color-accent: #C77DFF;
+    --color-accent-purple: #C77DFF;
 
     /* Neutrals */
     --color-bg: #FFFBF5;
@@ -35,7 +36,7 @@
   }
 
   * {
-    border-color: #E7E1D7;
+    border-color: #F0E6F6;
   }
 
   body {
@@ -91,7 +92,7 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-r from-[#FFB347] to-[#FFA500] text-white;
+    @apply bg-gradient-to-r from-[#A78BFA] to-[#C77DFF] text-white;
   }
 
   /* Pastel Badges */
