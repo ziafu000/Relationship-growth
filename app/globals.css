@@ -35,12 +35,11 @@
   }
 
   * {
-    @apply border-[var(--color-border)];
+    border-color: #E7E1D7;
   }
 
   body {
-    @apply bg-[var(--color-bg)] text-[var(--color-text)];
-    font-family: 'Nunito', system-ui, sans-serif;
+    @apply bg-[#FFFBF5] text-[#3D3D4E];
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -55,28 +54,32 @@
 @layer components {
   /* Bubble Cards */
   .bubble-card {
-    @apply bg-white rounded-[28px] p-6 shadow-[var(--shadow-md)] border-2 border-transparent;
+    @apply bg-white rounded-[28px] p-6 border-2 border-transparent;
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .bubble-card:hover {
-    @apply shadow-[var(--shadow-lg)] -translate-y-1;
+    @apply -translate-y-1;
+    box-shadow: 0 8px 24px rgba(255, 107, 157, 0.16);
   }
 
   .bubble-card-active {
-    @apply border-[var(--color-primary)] shadow-[var(--shadow-lg)];
+    @apply border-[#FF6B9D];
+    box-shadow: 0 8px 24px rgba(255, 107, 157, 0.16);
   }
 
   /* Bubble Buttons */
   .btn-bubble {
     @apply px-6 py-3 rounded-full font-semibold transition-all duration-300;
-    @apply shadow-[var(--shadow-sm)];
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.08);
     font-family: 'Fredoka', sans-serif;
     letter-spacing: 0.3px;
   }
 
   .btn-bubble:hover {
-    @apply shadow-[var(--shadow-md)] -translate-y-0.5;
+    @apply -translate-y-0.5;
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
   }
 
   .btn-bubble:active {
@@ -84,11 +87,11 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-dark)] text-white;
+    @apply bg-gradient-to-r from-[#FF6B9D] to-[#FF5285] text-white;
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-r from-[var(--color-secondary)] to-[#FFA500] text-white;
+    @apply bg-gradient-to-r from-[#FFB347] to-[#FFA500] text-white;
   }
 
   /* Pastel Badges */
@@ -98,23 +101,23 @@
   }
 
   .badge-pink {
-    @apply bg-[var(--color-bubble-pink)] text-[var(--color-primary)];
+    @apply bg-[#FFD7E5] text-[#FF6B9D];
   }
 
   .badge-blue {
-    @apply bg-[var(--color-bubble-blue)] text-blue-600;
+    @apply bg-[#C3E5FF] text-blue-600;
   }
 
   .badge-purple {
-    @apply bg-[var(--color-bubble-purple)] text-purple-600;
+    @apply bg-[#E5CBFF] text-purple-600;
   }
 
   .badge-yellow {
-    @apply bg-[var(--color-bubble-yellow)] text-yellow-700;
+    @apply bg-[#FFF4C3] text-yellow-700;
   }
 
   .badge-green {
-    @apply bg-[var(--color-bubble-green)] text-green-700;
+    @apply bg-[#D0F5D0] text-green-700;
   }
 
   /* Floating Elements */
@@ -129,17 +132,20 @@
 
   /* Bubble Input */
   .input-bubble {
-    @apply w-full px-5 py-3.5 rounded-[20px] border-2 border-[var(--color-border)];
-    @apply bg-white text-[var(--color-text)] placeholder:text-[var(--color-text-light)];
-    @apply focus:outline-none focus:border-[var(--color-primary)] focus:shadow-[var(--shadow-md)];
-    @apply transition-all duration-300;
-    font-family: 'Nunito', sans-serif;
+    @apply w-full px-5 py-3.5 rounded-[20px] border-2 border-[#F0E6F6];
+    @apply bg-white text-[#3D3D4E] placeholder:text-[#8E8E93];
+    @apply focus:outline-none focus:border-[#FF6B9D] transition-all duration-300;
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0);
+  }
+
+  .input-bubble:focus {
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.12);
   }
 
   /* Cute Icons */
   .icon-bubble {
     @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl;
-    @apply shadow-[var(--shadow-sm)];
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.08);
   }
 
   /* Progress Dots */
@@ -148,11 +154,11 @@
   }
 
   .progress-dot-active {
-    @apply bg-[var(--color-primary)] w-8;
+    @apply bg-[#FF6B9D] w-8;
   }
 
   .progress-dot-inactive {
-    @apply bg-[var(--color-border)];
+    @apply bg-[#F0E6F6];
   }
 }
 
@@ -163,16 +169,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: #FFFBF5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: #FF6B9D;
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-dark);
+  background: #FF5285;
 }
 
 /* Emoji animations */
