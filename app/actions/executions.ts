@@ -74,11 +74,11 @@ export async function completeStep(executionId: string, stepOrder: number) {
     completed_at: new Date().toISOString()
   }
 
-  const { error } = await supabase
-    .from('plan_executions')
+  const { error } = await (supabase
+    .from('plan_executions') as any)
     .update({
       steps_completed: [...stepsCompleted, newStep]
-    } as any)
+    })
     .eq('id', executionId)
 
   if (error) {
@@ -92,12 +92,12 @@ export async function completeStep(executionId: string, stepOrder: number) {
 export async function completePlanExecution(executionId: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('plan_executions')
+  const { error } = await (supabase
+    .from('plan_executions') as any)
     .update({
       status: 'completed',
       completed_at: new Date().toISOString()
-    } as any)
+    })
     .eq('id', executionId)
 
   if (error) {
@@ -112,12 +112,12 @@ export async function completePlanExecution(executionId: string) {
 export async function abandonPlanExecution(executionId: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('plan_executions')
+  const { error } = await (supabase
+    .from('plan_executions') as any)
     .update({
       status: 'abandoned',
       abandoned_at: new Date().toISOString()
-    } as any)
+    })
     .eq('id', executionId)
 
   if (error) {

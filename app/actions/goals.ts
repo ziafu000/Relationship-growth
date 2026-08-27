@@ -25,8 +25,6 @@ export async function selectGoal(formData: FormData) {
     return { error: 'Không tìm thấy relationship.' }
   }
 
-  type RelationshipMember = { relationship_id: string }
-
   const typedMember = member as RelationshipMember
 
   const checkInId = formData.get('check_in_id') as string

@@ -26,10 +26,10 @@ export async function createRelationship(formData: FormData) {
   const { data: relationship, error: relationshipError } = await supabase
     .from('relationships')
     .insert({
-      relationship_type: relationshipType as 'new' | 'long_term',
+      relationship_type: relationshipType,
       mode: 'solo',
       status: 'active'
-    })
+    } as any)
     .select()
     .single()
 
@@ -70,9 +70,9 @@ export async function createRelationship(formData: FormData) {
   }
 
   // Update user city
-  const { error: updateError } = await supabase
-    .from('users')
-    .update({ city: city } as any)
+  const { error: updateError } = await (supabase
+    .from('users') as any)
+    .update({ city: city })
     .eq('id', user.id)
 
   if (updateError) {

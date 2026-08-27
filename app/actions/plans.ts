@@ -99,12 +99,12 @@ export async function createPlans(goalId: string) {
 export async function selectPlan(planId: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('plans')
+  const { error } = await (supabase
+    .from('plans') as any)
     .update({
       selected_at: new Date().toISOString(),
       viewed_at: new Date().toISOString()
-    } as any)
+    })
     .eq('id', planId)
 
   if (error) {
@@ -119,12 +119,12 @@ export async function selectPlan(planId: string) {
 export async function rejectPlan(planId: string, reason: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('plans')
+  const { error } = await (supabase
+    .from('plans') as any)
     .update({
       rejected_at: new Date().toISOString(),
       rejection_reason: reason
-    } as any)
+    })
     .eq('id', planId)
 
   if (error) {
@@ -138,9 +138,9 @@ export async function rejectPlan(planId: string, reason: string) {
 export async function markPlanViewed(planId: string) {
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('plans')
-    .update({ viewed_at: new Date().toISOString() } as any)
+  const { error } = await (supabase
+    .from('plans') as any)
+    .update({ viewed_at: new Date().toISOString() })
     .eq('id', planId)
 
   if (error) {
