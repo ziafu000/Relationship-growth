@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { selectGoal } from '@/app/actions/goals'
 import { useSearchParams } from 'next/navigation'
 
@@ -49,7 +49,7 @@ const GOALS = [
   },
 ]
 
-export default function GoalsPage() {
+function GoalsForm() {
   const searchParams = useSearchParams()
   const checkInId = searchParams.get('check_in_id')
 
@@ -158,5 +158,17 @@ export default function GoalsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function GoalsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center">
+        <div className="text-[#5C635D] font-light">Đang tải...</div>
+      </div>
+    }>
+      <GoalsForm />
+    </Suspense>
   )
 }
