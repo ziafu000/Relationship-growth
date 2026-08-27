@@ -22,6 +22,11 @@ export async function createPlans(goalId: string) {
     [key: string]: any
   }
 
+  type User = {
+    city: string | null
+    [key: string]: any
+  }
+
   // Get goal details
   const { data: goal, error: goalError } = await supabase
     .from('goals')
@@ -33,11 +38,13 @@ export async function createPlans(goalId: string) {
     return { error: 'Không tìm thấy goal.' }
   }
 
+  const typedGoal = goal as Goal
+
   // Get passport
   const { data: passport } = await supabase
     .from('relationship_passports')
     .select('*')
-    .eq('relationship_id', (goal as Goal).relationship_id)
+    .eq('relationship_id', typedGoal.relationship_id)
     .single()
 
   // Get user's city
@@ -47,18 +54,20 @@ export async function createPlans(goalId: string) {
     .eq('id', user.id)
     .single()
 
+  const typedUser = userData as User | null
+
   // Generate plans using the engine
   const generatedPlans = await generatePlans({
-    goalType: (goal as Goal).goal_type,
-    checkIn: (goal as Goal).check_ins,
+    goalType: typedGoal.goal_type as any,
+    checkIn: typedGoal.check_ins,
     passport: passport,
-    relationshipType: (goal as Goal).relationships.relationship_type,
-    city: userData?.city || null
+    relationshipType: typedGoal.relationships.relationship_type as any,
+    city: typedUser?.city || null
   })
 
   // Save plans to database
   const plansToInsert = generatedPlans.map(plan => ({
-    relationship_id: (goal as Goal).relationship_id,
+    relationship_id: typedGoal.relationship_id,
     goal_id: goalId,
     user_id: user.id,
     plan_title_vi: plan.plan_title_vi,

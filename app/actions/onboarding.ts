@@ -38,15 +38,17 @@ export async function createRelationship(formData: FormData) {
     return { error: 'Không thể tạo relationship. Vui lòng thử lại.' }
   }
 
+  const typedRelationship = relationship as Relationship
+
   // Create relationship member
   const { error: memberError } = await supabase
     .from('relationship_members')
     .insert({
-      relationship_id: (relationship as Relationship).id,
+      relationship_id: typedRelationship.id,
       user_id: user.id,
       role: 'owner',
       joined_at: new Date().toISOString()
-    })
+    } as any)
 
   if (memberError) {
     console.error('Member error:', memberError)
@@ -57,10 +59,10 @@ export async function createRelationship(formData: FormData) {
   const { error: passportError } = await supabase
     .from('relationship_passports')
     .insert({
-      relationship_id: (relationship as Relationship).id,
+      relationship_id: typedRelationship.id,
       partner1_love_languages: loveLanguages,
       partner1_interests: interests
-    })
+    } as any)
 
   if (passportError) {
     console.error('Passport error:', passportError)
@@ -70,7 +72,7 @@ export async function createRelationship(formData: FormData) {
   // Update user city
   const { error: updateError } = await supabase
     .from('users')
-    .update({ city: city })
+    .update({ city: city } as any)
     .eq('id', user.id)
 
   if (updateError) {

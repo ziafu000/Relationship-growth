@@ -81,7 +81,7 @@ export default async function PlansViewPage({
             Chọn <span className="italic text-[#C4612F]">một kế hoạch</span> để bắt đầu
           </h2>
           <p className="text-[#5C635D] font-light max-w-2xl mx-auto">
-            {(goal as Goal)?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
+            {(goal as Goal | null)?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
           </p>
         </div>
 

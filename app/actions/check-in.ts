@@ -29,6 +29,8 @@ export async function submitCheckIn(formData: FormData) {
     relationship_id: string
   }
 
+  const typedMember = member as RelationshipMember
+
   // Get form data
   const currentMood = formData.get('current_mood') as string
   const connectionLevel = parseInt(formData.get('connection_level') as string)
@@ -43,7 +45,7 @@ export async function submitCheckIn(formData: FormData) {
   const { data: checkIn, error: checkInError } = await supabase
     .from('check_ins')
     .insert({
-      relationship_id: (member as RelationshipMember).relationship_id,
+      relationship_id: typedMember.relationship_id,
       user_id: user.id,
       current_mood: currentMood,
       connection_level: connectionLevel,
@@ -54,7 +56,7 @@ export async function submitCheckIn(formData: FormData) {
       budget_preference: budgetPreference,
       location_preference: locationPreference,
       completed_at: new Date().toISOString()
-    })
+    } as any)
     .select()
     .single()
 
@@ -65,8 +67,10 @@ export async function submitCheckIn(formData: FormData) {
 
   type CheckIn = { id: string; [key: string]: any }
 
+  const typedCheckIn = checkIn as CheckIn
+
   revalidatePath('/', 'layout')
-  redirect(`/goals?check_in_id=${(checkIn as CheckIn).id}`)
+  redirect(`/goals?check_in_id=${typedCheckIn.id}`)
 }
 
 export async function getLatestCheckIn() {

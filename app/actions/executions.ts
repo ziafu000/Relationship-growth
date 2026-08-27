@@ -26,17 +26,19 @@ export async function startPlanExecution(planId: string) {
     return { error: 'Không tìm thấy plan.' }
   }
 
+  const typedPlan = plan as Plan
+
   // Create plan execution
   const { data: execution, error: execError } = await supabase
     .from('plan_executions')
     .insert({
       plan_id: planId,
-      relationship_id: (plan as Plan).relationship_id,
+      relationship_id: typedPlan.relationship_id,
       user_id: user.id,
       status: 'started',
       started_at: new Date().toISOString(),
       created_at: new Date().toISOString()
-    })
+    } as any)
     .select()
     .single()
 
@@ -64,7 +66,9 @@ export async function completeStep(executionId: string, stepOrder: number) {
     return { error: 'Không tìm thấy execution.' }
   }
 
-  const stepsCompleted = (execution as Execution).steps_completed || []
+  const typedExecution = execution as Execution
+
+  const stepsCompleted = typedExecution.steps_completed || []
   const newStep = {
     step_id: stepOrder,
     completed_at: new Date().toISOString()

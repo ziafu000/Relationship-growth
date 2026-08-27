@@ -50,8 +50,11 @@ export interface RelationshipPassport {
   updated_at: string;
 }
 
-// Re-export from activity types
-export type { Pillar, City } from './activity';
+// Import types from activity
+import type { Pillar, City } from './activity';
+
+// Re-export for convenience
+export type { Pillar, City };
 
 // Relationship State (computed from check-ins)
 export interface RelationshipState {
