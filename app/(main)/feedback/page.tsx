@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { submitFeedback } from '@/app/actions/feedback'
 import { useSearchParams } from 'next/navigation'
 
-export default function FeedbackPage() {
+function FeedbackForm() {
   const searchParams = useSearchParams()
   const executionId = searchParams.get('execution_id')
 
@@ -271,5 +271,17 @@ export default function FeedbackPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function FeedbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center">
+        <div className="text-[#5C635D] font-light">Đang tải...</div>
+      </div>
+    }>
+      <FeedbackForm />
+    </Suspense>
   )
 }
