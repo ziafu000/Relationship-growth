@@ -69,14 +69,38 @@ export async function createRelationship(formData: FormData) {
     return { error: 'Không thể tạo relationship passport.' }
   }
 
-  // Update user city
-  const { error: updateError } = await (supabase
-    .from('users') as any)
-    .update({ city: city })
+  // Ensure user exists in public.users (fallback if trigger didn't run)
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('id')
     .eq('id', user.id)
+    .single()
 
-  if (updateError) {
-    console.error('Update user error:', updateError)
+  if (!existingUser) {
+    // Create user if doesn't exist
+    const { error: createUserError } = await supabase
+      .from('users')
+      .insert({
+        id: user.id,
+        email: user.email!,
+        name: user.user_metadata?.name || '',
+        city: city
+      })
+
+    if (createUserError) {
+      console.error('Create user error:', createUserError)
+      return { error: 'Không thể tạo user profile.' }
+    }
+  } else {
+    // Update user city if already exists
+    const { error: updateError } = await (supabase
+      .from('users') as any)
+      .update({ city: city })
+      .eq('id', user.id)
+
+    if (updateError) {
+      console.error('Update user error:', updateError)
+    }
   }
 
   revalidatePath('/', 'layout')
