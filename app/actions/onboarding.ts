@@ -21,7 +21,7 @@ export async function createRelationship(formData: FormData) {
   const interests = formData.getAll('interests') as string[]
 
   // DB writes — dùng admin client (bypasses RLS)
-  const { data: relationship, error: relationshipError } = await admin
+  const { data: relationship, error: relationshipError } = await (admin as any)
     .from('relationships')
     .insert({ relationship_type: relationshipType, mode: 'solo', status: 'active' })
     .select()
@@ -32,7 +32,7 @@ export async function createRelationship(formData: FormData) {
     return { error: 'Không thể tạo relationship. Vui lòng thử lại.' }
   }
 
-  const { error: memberError } = await admin
+  const { error: memberError } = await (admin as any)
     .from('relationship_members')
     .insert({
       relationship_id: relationship.id,
@@ -46,7 +46,7 @@ export async function createRelationship(formData: FormData) {
     return { error: 'Không thể tạo relationship member.' }
   }
 
-  const { error: passportError } = await admin
+  const { error: passportError } = await (admin as any)
     .from('relationship_passports')
     .insert({
       relationship_id: relationship.id,
@@ -59,8 +59,7 @@ export async function createRelationship(formData: FormData) {
     return { error: 'Không thể tạo relationship passport.' }
   }
 
-  // Upsert user profile
-  const { error: upsertUserError } = await admin
+  const { error: upsertUserError } = await (admin as any)
     .from('users')
     .upsert({
       id: user.id,
