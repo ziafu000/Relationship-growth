@@ -85,7 +85,7 @@ export async function createRelationship(formData: FormData) {
         email: user.email!,
         name: user.user_metadata?.name || '',
         city: city
-      })
+      } as any)
 
     if (createUserError) {
       console.error('Create user error:', createUserError)
