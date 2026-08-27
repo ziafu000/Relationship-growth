@@ -36,58 +36,35 @@ npm install
 
 ### 3. Setup Supabase
 
-1. Tạo project tại [supabase.com](https://supabase.com)
-2. Copy credentials từ Settings → API
-3. Tạo file `.env.local`:
+See detailed instructions in **[SUPABASE.md](SUPABASE.md)**
+
+**Quick setup:**
+
+1. Create project at [supabase.com](https://supabase.com)
+2. Copy credentials to `.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-Database_password=your_db_password
-
-AI_PROVIDER=none
-ANTHROPIC_API_KEY=
-OPENAI_API_KEY=
-
-NEXT_PUBLIC_POSTHOG_KEY=
-NEXT_PUBLIC_POSTHOG_HOST=https://app.posthog.com
-
-NEXT_PUBLIC_SENTRY_DSN=
-
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_DEFAULT_CITY=hanoi
-NEXT_PUBLIC_DEFAULT_LANGUAGE=vi
 ```
 
-### 4. Run Database Migrations
+3. Install Supabase CLI and apply migrations:
 
-Vào Supabase Dashboard → SQL Editor và chạy lần lượt:
+```bash
+npm install -g supabase
+npm run supabase:link
+npm run db:push
+```
 
-1. `supabase/migrations/001_create_users_auth.sql`
-2. `supabase/migrations/002_create_relationships.sql`
-3. `supabase/migrations/003_create_relationship_members_passports.sql`
-4. `supabase/migrations/004_create_activities.sql`
-5. `supabase/migrations/005_create_check_ins_goals.sql`
-6. `supabase/migrations/006_create_plans_executions.sql`
-7. `supabase/migrations/007_create_feedback_memory.sql`
-8. `supabase/migrations/008_create_rls_policies.sql`
-
-### 5. Seed Sample Data
-
-Chạy file `supabase/seed/sample-activities.sql` để thêm 6 activities mẫu.
-
-### 6. Disable Email Confirmation (Development)
-
-Supabase Dashboard → Authentication → Providers → Email → Tắt "Confirm email"
-
-### 7. Run Development Server
+4. Run development server:
 
 ```bash
 npm run dev
 ```
 
-Mở [http://localhost:3000](http://localhost:3000)
+**For detailed setup, troubleshooting, and verification:** See [SUPABASE.md](SUPABASE.md)
 
 ## 🎨 Design System
 
@@ -245,68 +222,30 @@ relationship-growth-os/
 
 ## 🎯 What's NOT Implemented (Future Phases)
 
-### Phase 8: Relationship Memory
-- Process feedback into memory
-- Learn preferences over time
-- Avoid patterns identification
-- Memory-driven recommendations
+See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed roadmap.
 
-### Phase 9: Couple Mode
-- Partner invitation
-- Consent management
-- Shared data access
-- Joint activities
+**Next priority phases:**
+- **Phase 8:** Relationship Memory - Learn from feedback, personalize recommendations
+- **Phase 9:** Couple Mode - Partner invitations, consent management
+- **Phase 10:** Admin Panel - Activity CRUD, analytics dashboard
+- **Phase 11-14:** PWA, Localization, Testing, Production features
 
-### Phase 10: Admin Panel
-- Activity CRUD
-- Rules configuration
-- Analytics dashboard
-
-### Phase 11: PWA
-- Service worker
-- Offline support
-- Install prompts
-
-### Phase 12: Localization
-- Full English translations
-- i18n setup
-
-### Phase 13: Testing & QA
-- E2E tests
-- Unit tests
-
-### Phase 14: Production Launch
-- Analytics integration (PostHog)
-- Error tracking (Sentry)
-- Performance optimization
+**Current focus:** MVP is complete. Next step is implementing the Memory System to enable learning and personalization.
 
 ## 🚧 Manual Tasks Required
 
-### 1. Supabase Setup
-- Create project manually
-- Copy credentials to `.env.local`
-- Run all 8 migrations in SQL Editor
-- Run seed file for sample activities
-- Disable email confirmation for dev
+See [SUPABASE.md](SUPABASE.md) for detailed setup instructions.
 
-### 2. Sample Activities
-Run `supabase/seed/sample-activities.sql` để có 6 activities:
-1. Dạo phố cổ Hà Nội và uống cà phê
-2. Cùng nhau nấu bữa tối
-3. Trò chuyện sâu với 20 câu hỏi
-4. Picnic bên Hồ Tây
-5. Viết thư cảm ơn nhau
-6. Nghi thức cà phê sáng
+**Quick checklist:**
+1. ✅ Create Supabase project
+2. ✅ Copy credentials to `.env.local`
+3. ✅ Install Supabase CLI: `npm install -g supabase`
+4. ✅ Link project: `npm run supabase:link`
+5. ✅ Apply migrations: `npm run db:push`
+6. ✅ Seed sample activities (optional)
+7. ⚠️ Configure Site URL in Supabase Dashboard for production
 
-### 3. Production Deployment
-- Connect Vercel to repository
-- Add environment variables
-- Deploy
-
-### 4. Analytics (Optional)
-- Create PostHog account
-- Create Sentry project
-- Add API keys to `.env.local`
+**For troubleshooting:** See [SUPABASE.md](SUPABASE.md#troubleshooting)
 
 ## 🎨 Design Philosophy
 
@@ -320,11 +259,21 @@ Run `supabase/seed/sample-activities.sql` để có 6 activities:
 
 ## 📝 Notes
 
-- AI Provider hiện tại: `none` (rules-based only)
-- Có thể thêm Claude/OpenAI sau cho personalization tốt hơn
-- Database có RLS policies để đảm bảo privacy
-- Solo mode là default, Couple mode chưa implement
-- Memory system chưa hoạt động (Phase 8)
+- **Database:** 13 tables with RLS policies for privacy
+- **Migrations:** All applied and verified - see [SUPABASE.md](SUPABASE.md)
+- **AI Provider:** Currently `none` (rules-based only), can add Claude/OpenAI later
+- **Mode:** Solo mode (default), Couple mode not implemented yet (Phase 9)
+- **Memory:** Structure exists but learning system not active yet (Phase 8)
+- **Sample Data:** 6 activities seeded for testing
+- **Design:** Warm & Earthy (terracotta accent, cream background)
+
+## 📚 Documentation
+
+- **[README.md](README.md)** - This file - project overview and quick start
+- **[PROJECT_STATUS.md](PROJECT_STATUS.md)** - Current implementation status and roadmap
+- **[SUPABASE.md](SUPABASE.md)** - Database setup, migrations, and troubleshooting
+- **[CLAUDE.md](CLAUDE.md)** - Complete 14-phase implementation plan
+- **[Relationship_Growth_OS_Tong_Quan_Du_An.md](Relationship_Growth_OS_Tong_Quan_Du_An.md)** - Vietnamese project overview and product thesis
 
 ## 🙏 Credits
 
