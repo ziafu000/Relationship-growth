@@ -10,7 +10,7 @@ export async function sendConfirmationEmail(
 ) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Relationship Growth OS <onboarding@yourdomain.com>',
+      from: 'Relationship Growth OS <onboarding@resend.dev>',
       to: [email],
       subject: 'Xác nhận email của bạn ✨',
       html: `
@@ -80,7 +80,7 @@ export async function sendPasswordResetEmail(
 ) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Relationship Growth OS <onboarding@yourdomain.com>',
+      from: 'Relationship Growth OS <onboarding@resend.dev>',
       to: [email],
       subject: 'Đặt lại mật khẩu 🔐',
       html: `

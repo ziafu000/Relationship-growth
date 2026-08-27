@@ -47,14 +47,11 @@ export async function signup(formData: FormData) {
   }
 
   // Option B: Use custom email service (Resend)
-  // Uncomment when RESEND_API_KEY is configured
-  /*
   if (process.env.RESEND_API_KEY && authData.user) {
     const { sendConfirmationEmail } = await import('@/lib/email/resend')
     const confirmUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?token=${authData.user.id}`
     await sendConfirmationEmail(email, confirmUrl, name)
   }
-  */
 
   // Don't redirect automatically - let the UI show "check email" message
   return { success: true }
