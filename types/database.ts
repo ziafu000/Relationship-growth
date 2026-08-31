@@ -153,6 +153,7 @@ export interface Database {
           title_en: string | null
           description_vi: string | null
           description_en: string | null
+          image_url: string | null
           category: string
           pillar: string[]
           relationship_type: string[]
@@ -179,6 +180,7 @@ export interface Database {
           title_en?: string | null
           description_vi?: string | null
           description_en?: string | null
+          image_url?: string | null
           category: string
           pillar: string[]
           relationship_type: string[]
@@ -205,6 +207,7 @@ export interface Database {
           title_en?: string | null
           description_vi?: string | null
           description_en?: string | null
+          image_url?: string | null
           category?: string
           pillar?: string[]
           relationship_type?: string[]
