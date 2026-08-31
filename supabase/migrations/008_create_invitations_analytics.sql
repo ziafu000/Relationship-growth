@@ -20,19 +20,27 @@ ALTER TABLE public.couple_invitations ENABLE ROW LEVEL SECURITY;
 -- RLS Policies
 CREATE POLICY "Users can view invitations they created"
   ON public.couple_invitations FOR SELECT
+  TO authenticated
   USING (inviter_id = auth.uid());
 
-CREATE POLICY "Users can view invitations by token"
+CREATE POLICY "Users can view invitations directed to them"
   ON public.couple_invitations FOR SELECT
-  USING (auth.uid() IS NOT NULL);
+  TO authenticated
+  USING (
+    invitee_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+    OR
+    invite_token = current_setting('request.jwt.claim.invite_token', true)
+  );
 
 CREATE POLICY "Users can create invitations"
   ON public.couple_invitations FOR INSERT
+  TO authenticated
   WITH CHECK (inviter_id = auth.uid());
 
-CREATE POLICY "Users can update invitations"
+CREATE POLICY "Inviter can update invitations"
   ON public.couple_invitations FOR UPDATE
-  USING (inviter_id = auth.uid() OR auth.uid() IS NOT NULL);
+  TO authenticated
+  USING (inviter_id = auth.uid());
 
 -- Indexes
 CREATE INDEX idx_couple_invitations_relationship ON public.couple_invitations(relationship_id);

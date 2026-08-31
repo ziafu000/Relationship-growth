@@ -7,9 +7,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function createRelationship(formData: FormData) {
   const supabase = await createClient()
-  const admin = createAdminClient()
 
-  // Auth check — dùng user client
+  // Auth check
   const { data: { user }, error: userError } = await supabase.auth.getUser()
   if (userError || !user) {
     return { error: 'Không tìm thấy user. Vui lòng đăng nhập lại.' }
@@ -20,56 +19,33 @@ export async function createRelationship(formData: FormData) {
   const loveLanguages = formData.getAll('love_languages') as string[]
   const interests = formData.getAll('interests') as string[]
 
-  // DB writes — dùng admin client (bypasses RLS)
-  const { data: relationship, error: relationshipError } = await (admin as any)
-    .from('relationships')
-    .insert({ relationship_type: relationshipType, mode: 'solo', status: 'active' })
-    .select()
-    .single()
-
-  if (relationshipError) {
-    console.error('Relationship error:', relationshipError)
-    return { error: 'Không thể tạo relationship. Vui lòng thử lại.' }
-  }
-
-  const { error: memberError } = await (admin as any)
+  // Check if user already has an active relationship to avoid duplicates
+  const { data: existingMember } = await supabase
     .from('relationship_members')
-    .insert({
-      relationship_id: relationship.id,
-      user_id: user.id,
-      role: 'owner',
-      joined_at: new Date().toISOString()
-    })
+    .select('relationship_id')
+    .eq('user_id', user.id)
+    .limit(1)
 
-  if (memberError) {
-    console.error('Member error:', memberError)
-    return { error: 'Không thể tạo relationship member.' }
+  if (existingMember && existingMember.length > 0) {
+    redirect('/dashboard')
   }
 
-  const { error: passportError } = await (admin as any)
-    .from('relationship_passports')
-    .insert({
-      relationship_id: relationship.id,
-      partner1_love_languages: loveLanguages,
-      partner1_interests: interests
-    })
-
-  if (passportError) {
-    console.error('Passport error:', passportError)
-    return { error: 'Không thể tạo relationship passport.' }
+  // Transactional RPC call to create relationship, member, passport, and update user
+  const rpcArgs: any = {
+    p_user_id: user.id,
+    p_relationship_type: relationshipType,
+    p_city: city,
+    p_love_languages: loveLanguages,
+    p_interests: interests,
+    p_user_email: user.email,
+    p_user_name: user.user_metadata?.name || ''
   }
 
-  const { error: upsertUserError } = await (admin as any)
-    .from('users')
-    .upsert({
-      id: user.id,
-      email: user.email!,
-      name: user.user_metadata?.name || '',
-      city: city
-    }, { onConflict: 'id' })
+  const { error: rpcError } = await (supabase.rpc as any)('create_solo_relationship', rpcArgs)
 
-  if (upsertUserError) {
-    console.error('Upsert user error:', upsertUserError)
+  if (rpcError) {
+    console.error('RPC error:', rpcError)
+    return { error: 'Không thể tạo relationship. Vui lòng thử lại.' }
   }
 
   revalidatePath('/', 'layout')

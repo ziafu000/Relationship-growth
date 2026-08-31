@@ -5,8 +5,9 @@ import PlanCard from '@/components/plans/PlanCard'
 export default async function PlansViewPage({
   params,
 }: {
-  params: { goalId: string }
+  params: Promise<{ goalId: string }>
 }) {
+  const resolvedParams = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -18,7 +19,7 @@ export default async function PlansViewPage({
   const { data: plans, error } = await supabase
     .from('plans')
     .select('*')
-    .eq('goal_id', params.goalId)
+    .eq('goal_id', resolvedParams.goalId)
     .order('rank', { ascending: true })
 
   if (error || !plans || plans.length === 0) {
@@ -47,7 +48,7 @@ export default async function PlansViewPage({
   const { data: goal } = await supabase
     .from('goals')
     .select('*')
-    .eq('id', params.goalId)
+    .eq('id', resolvedParams.goalId)
     .single()
 
   type Goal = { goal_description_vi?: string; [key: string]: any }

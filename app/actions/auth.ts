@@ -19,6 +19,10 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
+  const redirectTo = formData.get('redirect') as string
+  if (redirectTo && redirectTo.startsWith('/')) {
+    redirect(redirectTo)
+  }
   redirect('/dashboard')
 }
 
@@ -46,14 +50,7 @@ export async function signup(formData: FormData) {
     return { error: error.message }
   }
 
-  // Option B: Use custom email service (Resend)
-  if (process.env.RESEND_API_KEY && authData.user) {
-    const { sendConfirmationEmail } = await import('@/lib/email/resend')
-    const confirmUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/confirm?token=${authData.user.id}`
-    await sendConfirmationEmail(email, confirmUrl, name)
-  }
-
-  // Don't redirect automatically - let the UI show "check email" message
+  // Remove Option B block completely
   return { success: true }
 }
 
