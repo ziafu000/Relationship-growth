@@ -35,6 +35,7 @@ const config: Config = {
         body: ['Nunito', 'system-ui', 'sans-serif'],
         sans: ['Nunito', 'system-ui', 'sans-serif'],
         serif: ['Fredoka', 'Georgia', 'serif'],
+        handwriting: ['var(--font-handwriting)', 'cursive'],
       },
       borderRadius: {
         'bubble': '28px',
@@ -48,7 +49,18 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui')
+  ],
+  daisyui: {
+    themes: ["light"],
+    base: false,
+    styled: true,
+    utils: true,
+    prefix: "",
+    logs: false,
+    themeRoot: ":root",
+  },
 };
 
 export default config;

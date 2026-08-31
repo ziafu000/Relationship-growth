@@ -15,6 +15,8 @@ interface Plan {
   rank: number
 }
 
+import { Timeline, TimelineItem } from '@/components/ui/timeline'
+
 export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boolean }) {
   const [loading, setLoading] = useState(false)
   const [showRejectDialog, setShowRejectDialog] = useState(false)
@@ -59,29 +61,29 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
 
   return (
     <>
-      <div className="bubble-card bg-gradient-to-br from-white to-pink-50/20 hover:shadow-bubble-lg transition-all">
+      <div className={`bg-white p-6 shadow-md border border-gray-200 transition-transform ${isActive ? 'ring-4 ring-orange-400 rotate-0' : 'rotate-1'}`}>
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="badge-bubble badge-pink">
+            <div className="flex items-center gap-2 mb-2 flex-wrap font-handwriting">
+              <span className="inline-block bg-orange-100 text-orange-800 px-3 py-1 text-sm transform -rotate-2">
                 ✨ Lựa chọn {plan.rank}
               </span>
               {plan.effort_level && (
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${effortColors[plan.effort_level] || 'bg-gray-100 text-gray-700'}`}>
+                <span className={`inline-block px-3 py-1 text-xs border ${effortColors[plan.effort_level] || 'bg-gray-50 border-gray-200 text-gray-700'}`}>
                   {effortLabels[plan.effort_level] || plan.effort_level}
                 </span>
               )}
               {plan.estimated_time_minutes && (
-                <span className="badge-bubble badge-blue">
+                <span className="inline-block bg-blue-50 border border-blue-200 text-blue-700 px-3 py-1 text-xs transform rotate-2">
                   ⏱️ {plan.estimated_time_minutes} phút
                 </span>
               )}
             </div>
-            <h3 className="font-heading text-2xl font-bold text-gray-800 mb-2">
+            <h3 className="font-handwriting text-2xl font-bold text-gray-800 mb-2">
               {plan.plan_title_vi}
             </h3>
-            <p className="text-gray-600 font-light">
+            <p className="text-gray-600 font-light font-handwriting text-lg">
               {plan.reasoning_vi}
             </p>
           </div>
@@ -89,40 +91,42 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
 
         {/* Steps Preview */}
         {plan.steps && Array.isArray(plan.steps) && plan.steps.length > 0 && (
-          <div className="mb-6">
+          <div className="mb-6 font-handwriting">
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-2 text-sm font-medium text-primary hover:text-pink-600 transition-colors mb-3"
+              className="flex items-center gap-2 text-lg text-orange-600 hover:text-orange-700 transition-colors mb-4"
             >
               {expanded ? '▼' : '▶'} Các bước thực hiện ({plan.steps.length} bước)
             </button>
 
             {expanded && (
-              <div className="space-y-3 pl-6 border-l-2 border-pink-200">
+              <Timeline>
                 {plan.steps.map((step: any, index: number) => (
-                  <div key={index} className="flex gap-3">
-                    <div className="w-6 h-6 rounded-full bg-bubble-pink flex items-center justify-center text-primary text-xs font-bold flex-shrink-0">
-                      {step.order || index + 1}
-                    </div>
-                    <p className="text-sm font-light text-gray-600 pt-1">
-                      {step.instruction_vi}
-                    </p>
-                  </div>
+                  <TimelineItem 
+                    key={index} 
+                    isFirst={index === 0}
+                    isLast={index === plan.steps.length - 1}
+                    end={
+                      <p className="text-lg text-gray-700 bg-orange-50 p-3 shadow-sm border border-orange-100 ml-4">
+                        {step.instruction_vi}
+                      </p>
+                    }
+                  />
                 ))}
-              </div>
+              </Timeline>
             )}
           </div>
         )}
 
         {/* Conversation Starters */}
         {expanded && plan.conversation_starters && Array.isArray(plan.conversation_starters) && plan.conversation_starters.length > 0 && (
-          <div className="mb-6 p-4 bg-purple-50 border-2 border-purple-200 rounded-[20px]">
-            <h4 className="text-sm font-semibold text-purple-800 mb-2">
+          <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 shadow-sm font-handwriting transform -rotate-1">
+            <h4 className="text-lg font-bold text-yellow-800 mb-2">
               💬 Câu hỏi gợi ý
             </h4>
             <ul className="space-y-2">
               {plan.conversation_starters.slice(0, 3).map((prompt: any, index: number) => (
-                <li key={index} className="text-sm font-light text-purple-700">
+                <li key={index} className="text-lg text-yellow-700">
                   • {prompt.prompt_vi}
                 </li>
               ))}
@@ -135,14 +139,14 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
           <button
             onClick={handleSelect}
             disabled={loading}
-            className="btn-bubble btn-primary flex-1"
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-handwriting text-xl py-3 px-6 shadow-md transition-colors"
           >
             {loading ? 'Đang xử lý...' : '🚀 Chọn kế hoạch này'}
           </button>
           <button
             onClick={() => setShowRejectDialog(true)}
             disabled={loading}
-            className="btn-bubble bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:bg-white px-6"
+            className="border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-handwriting text-lg py-3 px-6 transition-colors"
           >
             Bỏ qua
           </button>
@@ -151,16 +155,16 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
 
       {/* Reject Dialog */}
       {showRejectDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 max-w-md w-full">
-            <h3 className="font-heading text-xl font-bold text-gray-800 mb-3">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white p-6 shadow-lg border border-gray-200 max-w-md w-full transform rotate-1">
+            <h3 className="font-handwriting text-2xl font-bold text-gray-800 mb-3">
               Tại sao bạn bỏ qua kế hoạch này?
             </h3>
-            <p className="text-sm font-light text-gray-600 mb-4">
+            <p className="text-lg font-light text-gray-600 mb-4 font-handwriting">
               Giúp chúng tôi cải thiện đề xuất cho lần sau
             </p>
 
-            <div className="space-y-2 mb-6">
+            <div className="space-y-3 mb-6 font-handwriting">
               {[
                 'Không có thời gian',
                 'Quá tốn kém',
@@ -171,10 +175,10 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
                 <button
                   key={reason}
                   onClick={() => setRejectReason(reason)}
-                  className={`w-full p-3 rounded-[20px] border-2 text-left text-sm transition-all ${
+                  className={`w-full p-3 border-2 text-left text-lg transition-colors ${
                     rejectReason === reason
-                      ? 'border-primary bg-bubble-pink shadow-bubble'
-                      : 'border-pink-200 bg-white hover:border-primary/50'
+                      ? 'border-orange-500 bg-orange-50'
+                      : 'border-gray-200 bg-white hover:border-orange-300'
                   }`}
                 >
                   {reason}
@@ -185,14 +189,14 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
             <div className="flex gap-3">
               <button
                 onClick={() => setShowRejectDialog(false)}
-                className="btn-bubble bg-white border-2 border-gray-200 text-gray-700 hover:border-primary hover:bg-white flex-1"
+                className="flex-1 border-2 border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-handwriting text-lg py-3 px-6 transition-colors"
               >
                 Hủy
               </button>
               <button
                 onClick={handleReject}
                 disabled={!rejectReason || loading}
-                className="btn-bubble btn-primary flex-1"
+                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-handwriting text-lg py-3 px-6 shadow-md transition-colors disabled:opacity-50"
               >
                 Xác nhận
               </button>

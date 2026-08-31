@@ -42,14 +42,14 @@ export default async function ActivityPage({
     const result = await startPlanExecution(resolvedParams.planId)
     if (result.error) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4">
-          <div className="bubble-card bg-gradient-to-br from-white to-pink-50/30 max-w-md text-center">
+        <div className="min-h-screen bg-orange-50 flex items-center justify-center px-4">
+          <div className="bg-white p-6 shadow-md border border-gray-200 max-w-md text-center transform -rotate-1">
             <div className="text-4xl mb-4 emoji-bounce">😔</div>
-            <h2 className="font-heading text-2xl font-bold text-gray-800 mb-3">Có lỗi xảy ra</h2>
-            <p className="text-gray-600 font-light mb-6">{result.error}</p>
+            <h2 className="font-handwriting text-3xl font-bold text-gray-800 mb-3">Có lỗi xảy ra</h2>
+            <p className="text-gray-600 font-light mb-6 font-handwriting text-lg">{result.error}</p>
             <a
               href="/dashboard"
-              className="btn-bubble btn-primary inline-block"
+              className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-handwriting text-xl py-3 px-6 shadow-md transition-colors w-full"
             >
               Về Dashboard
             </a>
