@@ -6,8 +6,9 @@ import ActivityView from '@/components/activities/ActivityView'
 export default async function ActivityPage({
   params,
 }: {
-  params: { planId: string }
+  params: Promise<{ planId: string }>
 }) {
+  const resolvedParams = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -19,7 +20,7 @@ export default async function ActivityPage({
   const { data: plan, error: planError } = await supabase
     .from('plans')
     .select('*')
-    .eq('id', params.planId)
+    .eq('id', resolvedParams.planId)
     .single()
 
   if (planError || !plan) {
@@ -30,7 +31,7 @@ export default async function ActivityPage({
   const { data: existingExecution } = await supabase
     .from('plan_executions')
     .select('*')
-    .eq('plan_id', params.planId)
+    .eq('plan_id', resolvedParams.planId)
     .eq('user_id', user.id)
     .single()
 
@@ -38,7 +39,7 @@ export default async function ActivityPage({
 
   // Create execution if not exists
   if (!execution) {
-    const result = await startPlanExecution(params.planId)
+    const result = await startPlanExecution(resolvedParams.planId)
     if (result.error) {
       return (
         <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4">

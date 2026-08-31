@@ -48,11 +48,25 @@ CREATE POLICY "Authenticated users can view active activities"
 
 CREATE POLICY "Admins can insert activities"
   ON public.activities FOR INSERT
-  WITH CHECK (auth.uid() IS NOT NULL);
+  TO authenticated
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM auth.users
+      WHERE id = auth.uid()
+      AND raw_app_meta_data->>'role' = 'admin'
+    )
+  );
 
 CREATE POLICY "Admins can update activities"
   ON public.activities FOR UPDATE
-  USING (auth.uid() IS NOT NULL);
+  TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1 FROM auth.users
+      WHERE id = auth.uid()
+      AND raw_app_meta_data->>'role' = 'admin'
+    )
+  );
 
 -- Auto-update updated_at
 CREATE TRIGGER update_activities_updated_at

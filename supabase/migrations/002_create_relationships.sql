@@ -61,7 +61,22 @@ CREATE POLICY "Users can view own memberships"
 
 CREATE POLICY "Users can create memberships"
   ON public.relationship_members FOR INSERT
-  WITH CHECK (true);
+  TO authenticated
+  WITH CHECK (
+    user_id = auth.uid()
+    AND (
+      -- the user is creating a new solo relationship
+      (role = 'owner')
+      OR
+      -- the user has been invited via a valid invitation
+      EXISTS (
+        SELECT 1 FROM public.couple_invitations
+        WHERE relationship_id = public.relationship_members.relationship_id
+        AND status = 'pending'
+        AND invitee_email = (SELECT email FROM auth.users WHERE id = auth.uid())
+      )
+    )
+  );
 
 CREATE POLICY "Users can update own membership"
   ON public.relationship_members FOR UPDATE

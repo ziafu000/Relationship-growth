@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, use } from 'react'
 import { login } from '@/app/actions/auth'
 import Link from 'next/link'
 
-export default function LoginPage() {
+export default function LoginPage({ searchParams }: { searchParams: Promise<{ redirect?: string }> }) {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const resolvedParams = use(searchParams)
 
   async function handleSubmit(formData: FormData) {
     setLoading(true)
@@ -80,6 +81,10 @@ export default function LoginPage() {
               <div className="p-3 rounded-[20px] bg-red-50 border-2 border-red-200 text-red-700 text-sm font-light">
                 {error}
               </div>
+            )}
+            
+            {resolvedParams.redirect && (
+              <input type="hidden" name="redirect" value={resolvedParams.redirect} />
             )}
 
             <button

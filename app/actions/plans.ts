@@ -99,6 +99,11 @@ export async function createPlans(goalId: string) {
 export async function selectPlan(planId: string) {
   const supabase = await createClient()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Unauthorized' }
+  }
+
   const { error } = await (supabase
     .from('plans') as any)
     .update({
@@ -106,6 +111,7 @@ export async function selectPlan(planId: string) {
       viewed_at: new Date().toISOString()
     })
     .eq('id', planId)
+    .eq('user_id', user.id)
 
   if (error) {
     console.error('Error selecting plan:', error)
@@ -119,6 +125,11 @@ export async function selectPlan(planId: string) {
 export async function rejectPlan(planId: string, reason: string) {
   const supabase = await createClient()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Unauthorized' }
+  }
+
   const { error } = await (supabase
     .from('plans') as any)
     .update({
@@ -126,6 +137,7 @@ export async function rejectPlan(planId: string, reason: string) {
       rejection_reason: reason
     })
     .eq('id', planId)
+    .eq('user_id', user.id)
 
   if (error) {
     console.error('Error rejecting plan:', error)
@@ -138,10 +150,16 @@ export async function rejectPlan(planId: string, reason: string) {
 export async function markPlanViewed(planId: string) {
   const supabase = await createClient()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { error: 'Unauthorized' }
+  }
+
   const { error } = await (supabase
     .from('plans') as any)
     .update({ viewed_at: new Date().toISOString() })
     .eq('id', planId)
+    .eq('user_id', user.id)
 
   if (error) {
     console.error('Error marking viewed:', error)

@@ -5,8 +5,9 @@ import { logout } from '@/app/actions/auth'
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: { feedback_submitted?: string }
+  searchParams: Promise<{ feedback_submitted?: string }>
 }) {
+  const resolvedSearchParams = await searchParams
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -15,7 +16,7 @@ export default async function DashboardPage({
     redirect('/login')
   }
 
-  const feedbackSubmitted = searchParams.feedback_submitted === 'true'
+  const feedbackSubmitted = resolvedSearchParams.feedback_submitted === 'true'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
