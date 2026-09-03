@@ -45,14 +45,14 @@ export default async function DashboardPage({
           <h1 className="shrink-0 font-heading text-xl font-bold text-gray-800">
             Relationship <span className="text-primary italic">Growth</span>
           </h1>
-          <div className="flex w-full min-w-0 items-start justify-between gap-3 sm:w-auto sm:items-center sm:justify-end">
-            <span className="min-w-0 break-all text-sm font-light text-gray-600 sm:max-w-xs sm:text-right">
+          <div className="flex w-full min-w-0 flex-row items-center justify-between gap-3 sm:w-auto sm:justify-end">
+            <span className="min-w-0 truncate text-sm font-light text-gray-600 sm:max-w-xs sm:text-right">
               {user.email}
             </span>
             <form action={logout} className="shrink-0">
               <button
                 type="submit"
-                className="text-sm font-light text-primary hover:text-pink-600 transition-colors"
+                className="text-sm font-light text-primary hover:text-pink-600 transition-colors whitespace-nowrap"
               >
                 Đăng xuất
               </button>

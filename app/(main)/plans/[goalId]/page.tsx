@@ -83,7 +83,7 @@ export default async function PlansViewPage({
             🎁 3 lựa chọn dành riêng cho bạn
           </span>
           <h2 className="font-handwriting text-3xl md:text-4xl font-bold text-gray-800 mb-3 mt-4">
-            Chọn <span className="text-orange-500">một kế hoạch</span> để bắt đầu
+            Chọn <span className="text-orange-700">một kế hoạch</span> để bắt đầu
           </h2>
           <p className="text-gray-600 font-light max-w-2xl mx-auto font-handwriting text-xl">
             {(goal as Goal | null)?.goal_description_vi || 'Mỗi kế hoạch được thiết kế phù hợp với hoàn cảnh của bạn'}
