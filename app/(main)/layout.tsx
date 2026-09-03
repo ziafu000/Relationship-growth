@@ -7,7 +7,7 @@ export default function MainLayout({
 }) {
   return (
     <>
-      {children}
+      <main id="main-content">{children}</main>
       <FloatingCheckIn />
     </>
   )

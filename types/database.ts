@@ -153,7 +153,6 @@ export interface Database {
           title_en: string | null
           description_vi: string | null
           description_en: string | null
-          image_url: string | null
           category: string
           pillar: string[]
           relationship_type: string[]
@@ -180,7 +179,6 @@ export interface Database {
           title_en?: string | null
           description_vi?: string | null
           description_en?: string | null
-          image_url?: string | null
           category: string
           pillar: string[]
           relationship_type: string[]
@@ -207,7 +205,6 @@ export interface Database {
           title_en?: string | null
           description_vi?: string | null
           description_en?: string | null
-          image_url?: string | null
           category?: string
           pillar?: string[]
           relationship_type?: string[]
@@ -384,6 +381,7 @@ export interface Database {
           abandoned_at: string | null
           steps_completed: any | null
           notes: string | null
+          activity_photo_path: string | null
           created_at: string
         }
         Insert: {
@@ -397,6 +395,7 @@ export interface Database {
           abandoned_at?: string | null
           steps_completed?: any | null
           notes?: string | null
+          activity_photo_path?: string | null
           created_at?: string
         }
         Update: {
@@ -410,6 +409,7 @@ export interface Database {
           abandoned_at?: string | null
           steps_completed?: any | null
           notes?: string | null
+          activity_photo_path?: string | null
           created_at?: string
         }
       }
@@ -459,7 +459,28 @@ export interface Database {
       }
     }
     Views: {}
-    Functions: {}
+    Functions: {
+      create_solo_relationship: {
+        Args: {
+          p_user_id: string
+          p_relationship_type: string
+          p_city: string
+          p_love_languages: string[]
+          p_interests: string[]
+          p_user_email: string
+          p_user_name: string
+        }
+        Returns: undefined
+      }
+      set_plan_execution_step_completion: {
+        Args: {
+          p_execution_id: string
+          p_step_order: number
+          p_completed: boolean
+        }
+        Returns: any
+      }
+    }
     Enums: {}
   }
 }

@@ -16,6 +16,21 @@ export default async function DashboardPage({
     redirect('/login')
   }
 
+  const { data: membership, error: membershipError } = await supabase
+    .from('relationship_members')
+    .select('relationship_id')
+    .eq('user_id', user.id)
+    .limit(1)
+    .maybeSingle()
+
+  if (membershipError) {
+    throw new Error('Unable to determine onboarding status')
+  }
+
+  if (!membership) {
+    redirect('/onboarding')
+  }
+
   const feedbackSubmitted = resolvedSearchParams.feedback_submitted === 'true'
 
   return (
@@ -26,15 +41,15 @@ export default async function DashboardPage({
 
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b-2 border-pink-200">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="font-heading text-xl font-bold text-gray-800">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="shrink-0 font-heading text-xl font-bold text-gray-800">
             Relationship <span className="text-primary italic">Growth</span>
           </h1>
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-light text-gray-600">
+          <div className="flex w-full min-w-0 items-start justify-between gap-3 sm:w-auto sm:items-center sm:justify-end">
+            <span className="min-w-0 break-all text-sm font-light text-gray-600 sm:max-w-xs sm:text-right">
               {user.email}
             </span>
-            <form action={logout}>
+            <form action={logout} className="shrink-0">
               <button
                 type="submit"
                 className="text-sm font-light text-primary hover:text-pink-600 transition-colors"

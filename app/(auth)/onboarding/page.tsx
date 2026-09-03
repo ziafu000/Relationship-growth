@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { createRelationship } from '@/app/actions/onboarding'
+import { toggleLimitedSelection } from '@/lib/onboarding'
 
 export default function OnboardingPage() {
   const [step, setStep] = useState(1)
@@ -32,19 +33,15 @@ export default function OnboardingPage() {
   }
 
   const toggleLoveLanguage = (lang: string) => {
-    setLoveLanguages(prev =>
-      prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang]
-    )
+    setLoveLanguages(prev => toggleLimitedSelection(prev, lang, 3))
   }
 
   const toggleInterest = (interest: string) => {
-    setInterests(prev =>
-      prev.includes(interest) ? prev.filter(i => i !== interest) : [...prev, interest]
-    )
+    setInterests(prev => toggleLimitedSelection(prev, interest, 5))
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4 py-12">
+    <main className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex items-center justify-center px-4 py-12">
       {/* Floating Decorations */}
       <div className="fixed top-20 right-10 text-6xl opacity-20 float-animation">💕</div>
       <div className="fixed bottom-32 left-10 text-5xl opacity-20 float-animation" style={{animationDelay: '1s'}}>✨</div>
@@ -176,7 +173,9 @@ export default function OnboardingPage() {
                   key={lang.id}
                   type="button"
                   onClick={() => toggleLoveLanguage(lang.id)}
-                  className={`p-3 rounded-[20px] border-2 text-sm transition-all ${
+                  disabled={loveLanguages.length >= 3 && !loveLanguages.includes(lang.id)}
+                  aria-pressed={loveLanguages.includes(lang.id)}
+                  className={`p-3 rounded-[20px] border-2 text-sm transition-all disabled:cursor-not-allowed disabled:opacity-50 ${
                     loveLanguages.includes(lang.id)
                       ? 'border-primary bg-bubble-purple shadow-bubble'
                       : 'border-purple-200 bg-white hover:border-primary/50 hover:shadow-bubble-md'
@@ -218,6 +217,10 @@ export default function OnboardingPage() {
               Chọn 3-5 sở thích để chúng tôi cá nhân hóa đề xuất
             </p>
 
+            <p className="mb-3 text-sm font-semibold text-gray-700" aria-live="polite">
+              Đã chọn {interests.length} / 5 sở thích
+            </p>
+
             <div className="grid grid-cols-2 gap-3">
               {[
                 { id: 'coffee', label: '☕ Cà phê' },
@@ -235,7 +238,9 @@ export default function OnboardingPage() {
                   key={interest.id}
                   type="button"
                   onClick={() => toggleInterest(interest.id)}
-                  className={`p-3 rounded-[20px] border-2 text-sm transition-all ${
+                  disabled={interests.length >= 5 && !interests.includes(interest.id)}
+                  aria-pressed={interests.includes(interest.id)}
+                  className={`p-3 rounded-[20px] border-2 text-sm transition-all disabled:cursor-not-allowed disabled:opacity-50 ${
                     interests.includes(interest.id)
                       ? 'border-primary bg-bubble-green shadow-bubble'
                       : 'border-green-200 bg-white hover:border-primary/50 hover:shadow-bubble-md'
@@ -262,7 +267,7 @@ export default function OnboardingPage() {
               </button>
               <button
                 onClick={handleSubmit}
-                disabled={interests.length === 0 || loading}
+                disabled={interests.length < 3 || interests.length > 5 || loading}
                 className="btn-bubble btn-primary flex-1"
               >
                 {loading ? 'Đang tạo...' : '🎉 Hoàn thành'}
@@ -271,6 +276,6 @@ export default function OnboardingPage() {
           </div>
         )}
       </div>
-    </div>
+    </main>
   )
 }
