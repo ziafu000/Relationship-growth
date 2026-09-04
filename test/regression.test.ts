@@ -78,8 +78,12 @@ test('step mutations serialize and the latest optimistic intent wins', async () 
   assert.equal(calls.length, 1)
   assert.equal(calls[0].completed, true)
   calls[0].release()
-  await Promise.resolve()
-  await Promise.resolve()
+  await assert.doesNotReject(async () => {
+    for (let attempt = 0; attempt < 10 && calls.length < 2; attempt += 1) {
+      await new Promise<void>((resolve) => setImmediate(resolve))
+    }
+    assert.equal(calls.length, 2)
+  })
   assert.equal(calls.length, 2)
   assert.equal(calls[1].completed, false)
   calls[1].release()
