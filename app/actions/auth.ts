@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { getAuthenticatedLandingPath } from '@/lib/auth-routing'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -12,18 +13,31 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: authData, error } = await supabase.auth.signInWithPassword(data)
 
-  if (error) {
-    return { error: error.message }
+  if (error || !authData.user) {
+    return { error: error?.message || 'Không thể đăng nhập.' }
+  }
+
+  const { data: membership, error: membershipError } = await supabase
+    .from('relationship_members')
+    .select('relationship_id')
+    .eq('user_id', authData.user.id)
+    .limit(1)
+    .maybeSingle()
+
+  if (membershipError) {
+    console.error('Membership lookup error after login:', membershipError)
+    return { error: 'Không thể kiểm tra trạng thái onboarding. Vui lòng thử lại.' }
   }
 
   revalidatePath('/', 'layout')
-  const redirectTo = formData.get('redirect') as string
-  if (redirectTo && redirectTo.startsWith('/')) {
-    redirect(redirectTo)
-  }
-  redirect('/dashboard')
+  redirect(
+    getAuthenticatedLandingPath(
+      Boolean(membership),
+      formData.get('redirect') as string | null,
+    ),
+  )
 }
 
 export async function signup(formData: FormData) {
@@ -44,7 +58,7 @@ export async function signup(formData: FormData) {
     }
   }
 
-  const { data: authData, error } = await supabase.auth.signUp(data)
+  const { error } = await supabase.auth.signUp(data)
 
   if (error) {
     return { error: error.message }

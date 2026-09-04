@@ -94,7 +94,7 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
           <div className="mb-6 font-handwriting">
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-2 text-lg text-orange-600 hover:text-orange-700 transition-colors mb-4"
+              className="flex items-center gap-2 text-lg text-orange-700 hover:text-orange-800 transition-colors mb-4"
             >
               {expanded ? '▼' : '▶'} Các bước thực hiện ({plan.steps.length} bước)
             </button>
@@ -139,7 +139,7 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
           <button
             onClick={handleSelect}
             disabled={loading}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-handwriting text-xl py-3 px-6 shadow-md transition-colors"
+            className="flex-1 bg-orange-700 hover:bg-orange-800 text-white font-handwriting text-xl py-3 px-6 shadow-md transition-colors"
           >
             {loading ? 'Đang xử lý...' : '🚀 Chọn kế hoạch này'}
           </button>
@@ -196,7 +196,7 @@ export default function PlanCard({ plan, isActive }: { plan: Plan, isActive: boo
               <button
                 onClick={handleReject}
                 disabled={!rejectReason || loading}
-                className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-handwriting text-lg py-3 px-6 shadow-md transition-colors disabled:opacity-50"
+                className="flex-1 bg-orange-700 hover:bg-orange-800 text-white font-handwriting text-lg py-3 px-6 shadow-md transition-colors disabled:opacity-50"
               >
                 Xác nhận
               </button>

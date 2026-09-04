@@ -517,6 +517,19 @@ async function learnAvoidPatterns(feedback) {
 
 ---
 
+## Activity photo ownership
+
+An activity photo belongs to `plan_executions`, not to the shared `activities`
+library or reusable `plans` row. The same person can run a plan more than once,
+and each execution is a distinct private memory. `plan_executions.activity_photo_path`
+stores only the private Storage object path. Objects live in the private
+`activity_images` bucket under `<user id>/<execution id>/<random id>.<ext>`.
+The server validates ownership and returns short-lived signed URLs for display;
+Storage RLS permits only that execution's user to read, insert, or delete its
+objects. Uploads are JPEG, PNG, or WebP and are limited to 5 MB in both the UI
+and bucket configuration. See `supabase/migrations/011_add_image_to_activities.sql`
+for the canonical schema and policy setup.
+
 ## Security Architecture
 
 ### Authentication Flow

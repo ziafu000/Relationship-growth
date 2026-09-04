@@ -3,7 +3,13 @@
 **Project:** Relationship Growth OS  
 **Project Ref:** `aqrykpomzxumiwgorydn`  
 **Status:** ✅ All migrations applied and verified  
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-09-04
+
+> [!WARNING]
+> The production project has a legacy empty migration ledger. Do not run
+> `supabase db push`, `db reset`, or migration repair against production. Follow
+> the preflight and exact-file procedure in `docs/production-migration-plan.md`.
+> The generic commands below are for a new/local environment only.
 
 ---
 
@@ -115,10 +121,12 @@ This applies all migration files in `supabase/migrations/` directory.
 ✅ analytics_events
 ```
 
-### Critical Functions (2 functions)
+### Critical Functions (4 functions)
 ```
 ✅ handle_new_user()           - Auto-create public.users on signup
 ✅ user_relationship_ids()     - Helper for RLS policies (prevents infinite recursion)
+✅ set_plan_execution_step_completion() - Persist explicit step state idempotently
+✅ create_solo_relationship() - Create onboarding records atomically and retry safely
 ```
 
 ### Triggers (1 trigger)
@@ -152,6 +160,8 @@ This applies all migration files in `supabase/migrations/` directory.
 | 008_create_rls_policies.sql | RLS policies | ✅ Applied |
 | **009_fix_recursive_policy.sql** | **Fix infinite recursion** | ✅ Applied |
 | **010_auto_create_public_user.sql** | **User trigger** | ✅ Applied |
+| **011_add_image_to_activities.sql** | **Private execution photos and step-state RPC** | ✅ Applied |
+| **012_create_solo_relationship_rpc.sql** | **Safe, retry-idempotent onboarding RPC** | ✅ Applied |
 
 **Note:** Migrations 009 and 010 were critical fixes for:
 - **009:** Prevents infinite recursion in RLS policy by using helper function
@@ -312,8 +322,8 @@ If CLI doesn't work, you can apply migrations manually:
 ### 3. Onboarding
 - Select relationship type
 - Select city
-- Select love languages
-- Select interests
+- Select 1–3 love languages
+- Select 3–5 interests
 - Click submit
 - Should redirect to `/dashboard` ✅
 - No "infinite recursion" error ✅
@@ -346,9 +356,14 @@ WHERE tgname = 'on_auth_user_created';
 ```sql
 SELECT proname 
 FROM pg_proc 
-WHERE proname IN ('handle_new_user', 'user_relationship_ids');
+WHERE proname IN (
+  'handle_new_user',
+  'user_relationship_ids',
+  'set_plan_execution_step_completion',
+  'create_solo_relationship'
+);
 
--- Expected: 2 rows
+-- Expected: 4 rows
 ```
 
 ### Check RLS Policies
@@ -396,7 +411,7 @@ All scripts do the same thing - use whichever fits your environment.
 ## 🎊 Success Metrics
 
 ✅ **13/13 tables** created  
-✅ **2/2 functions** deployed  
+✅ **4/4 functions** deployed
 ✅ **1/1 trigger** active  
 ✅ **4/4 RLS policies** applied  
 ✅ **0 errors** in verification  
