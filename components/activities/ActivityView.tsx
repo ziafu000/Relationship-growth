@@ -18,7 +18,7 @@ import {
 import { createClient } from '@/lib/supabase/client'
 import {
   completedStepOrders,
-  setCompletedStepOrder,
+  createStepCompletionController,
 } from '@/lib/execution-steps'
 import type { Database } from '@/types/database'
 import { Timeline, TimelineItem } from '@/components/ui/timeline'
@@ -51,6 +51,15 @@ export default function ActivityView({
   const [photoLoading, setPhotoLoading] = useState(false)
   const [, startTransition] = useTransition()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const stepControllerRef = useRef<ReturnType<typeof createStepCompletionController> | null>(null)
+
+  if (!stepControllerRef.current) {
+    stepControllerRef.current = createStepCompletionController(
+      completedStepOrders(execution.steps_completed),
+      (stepOrder, completed) => setStepCompletion(execution.id, stepOrder, completed),
+      setCompletedSteps,
+    )
+  }
 
   const steps = Array.isArray(plan.steps) ? plan.steps as ActivityStep[] : []
   const conversationStarters = Array.isArray(plan.conversation_starters)
@@ -60,21 +69,8 @@ export default function ActivityView({
     ? plan.tips as ActivityTips
     : null
 
-  async function handleStepToggle(stepOrder: number) {
-    const nowCompleted = !completedSteps.includes(stepOrder)
-    // Optimistic update
-    setCompletedSteps((previous) =>
-      setCompletedStepOrder(previous, stepOrder, nowCompleted),
-    )
-    const result = await setStepCompletion(execution.id, stepOrder, nowCompleted)
-    if (result?.error) {
-      // Revert on failure
-      setCompletedSteps((previous) =>
-        setCompletedStepOrder(previous, stepOrder, !nowCompleted),
-      )
-    } else if (result?.completedSteps) {
-      setCompletedSteps(result.completedSteps)
-    }
+  function handleStepToggle(stepOrder: number) {
+    void stepControllerRef.current?.toggle(stepOrder)
   }
 
   async function handleComplete() {
