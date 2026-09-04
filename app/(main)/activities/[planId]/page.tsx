@@ -2,6 +2,10 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { startPlanExecution } from '@/app/actions/executions'
 import ActivityView from '@/components/activities/ActivityView'
+import {
+  ACTIVITY_PHOTO_BUCKET,
+  isOwnedActivityPhotoPath,
+} from '@/lib/activity-photo'
 
 export default async function ActivityPage({
   params,
@@ -60,5 +64,33 @@ export default async function ActivityPage({
     execution = result.execution || null
   }
 
-  return <ActivityView plan={plan as any} execution={execution as any} />
+  if (!execution) {
+    redirect('/dashboard')
+  }
+
+  let initialPhotoUrl: string | null = null
+  if (
+    execution.activity_photo_path &&
+    isOwnedActivityPhotoPath(
+      execution.activity_photo_path,
+      user.id,
+      execution.id,
+    )
+  ) {
+    const { data: signedPhoto, error: signedPhotoError } = await supabase.storage
+      .from(ACTIVITY_PHOTO_BUCKET)
+      .createSignedUrl(execution.activity_photo_path, 60 * 60)
+
+    if (!signedPhotoError) {
+      initialPhotoUrl = signedPhoto.signedUrl
+    }
+  }
+
+  return (
+    <ActivityView
+      plan={plan}
+      execution={execution}
+      initialPhotoUrl={initialPhotoUrl}
+    />
+  )
 }

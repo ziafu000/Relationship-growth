@@ -121,7 +121,11 @@ BEGIN
     partner1_love_languages,
     partner1_interests
   )
-  VALUES (v_relationship_id, p_love_languages, p_interests);
+  VALUES (
+    v_relationship_id,
+    pg_catalog.to_jsonb(p_love_languages),
+    pg_catalog.to_jsonb(p_interests)
+  );
 END;
 $$;
 

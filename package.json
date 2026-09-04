@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "test": "node test/regression.js",
+    "test": "tsx --test test/**/*.test.ts",
     "start": "next start",
     "lint": "eslint",
     "db:push": "supabase db push",

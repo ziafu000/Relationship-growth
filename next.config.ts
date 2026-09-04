@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const activityPhotoPattern = supabaseUrl
+  ? new URL('/storage/v1/object/sign/activity_images/**', supabaseUrl)
+  : null;
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: activityPhotoPattern ? [activityPhotoPattern] : [],
+  },
   async headers() {
     return [
       {

@@ -3,7 +3,13 @@
 **Project:** Relationship Growth OS  
 **Project Ref:** `aqrykpomzxumiwgorydn`  
 **Status:** ✅ All migrations applied and verified  
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-09-04
+
+> [!WARNING]
+> The production project has a legacy empty migration ledger. Do not run
+> `supabase db push`, `db reset`, or migration repair against production. Follow
+> the preflight and exact-file procedure in `docs/production-migration-plan.md`.
+> The generic commands below are for a new/local environment only.
 
 ---
 

@@ -16,41 +16,61 @@ import {
   validateActivityPhoto,
 } from '@/lib/activity-photo'
 import { createClient } from '@/lib/supabase/client'
+import {
+  completedStepOrders,
+  setCompletedStepOrder,
+} from '@/lib/execution-steps'
+import type { Database } from '@/types/database'
 import { Timeline, TimelineItem } from '@/components/ui/timeline'
 import { PolaroidCard } from '@/components/ui/polaroid-card'
 
+type Plan = Database['public']['Tables']['plans']['Row']
+type Execution = Database['public']['Tables']['plan_executions']['Row']
+type ActivityStep = { order?: number; instruction_vi?: string }
+type ConversationStarter = { prompt_vi?: string }
+type ActivityTips = { do?: string[]; dont?: string[] }
+
 interface ActivityViewProps {
-  plan: any
-  execution: any
+  plan: Plan
+  execution: Execution
+  initialPhotoUrl: string | null
 }
 
-export default function ActivityView({ plan, execution }: ActivityViewProps) {
+export default function ActivityView({
+  plan,
+  execution,
+  initialPhotoUrl,
+}: ActivityViewProps) {
   const [loading, setLoading] = useState(false)
   const [completedSteps, setCompletedSteps] = useState<number[]>(
-    execution.steps_completed?.map((s: any) => Number(s.step_id)) || []
+    completedStepOrders(execution.steps_completed),
   )
   const [showAbandonDialog, setShowAbandonDialog] = useState(false)
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
+  const [photoUrl, setPhotoUrl] = useState<string | null>(initialPhotoUrl)
   const [photoError, setPhotoError] = useState<string | null>(null)
   const [photoLoading, setPhotoLoading] = useState(false)
   const [, startTransition] = useTransition()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const steps = Array.isArray(plan.steps) ? plan.steps : []
-  const conversationStarters = Array.isArray(plan.conversation_starters) ? plan.conversation_starters : []
-  const tips = plan.tips
+  const steps = Array.isArray(plan.steps) ? plan.steps as ActivityStep[] : []
+  const conversationStarters = Array.isArray(plan.conversation_starters)
+    ? plan.conversation_starters as ConversationStarter[]
+    : []
+  const tips = plan.tips && typeof plan.tips === 'object'
+    ? plan.tips as ActivityTips
+    : null
 
   async function handleStepToggle(stepOrder: number) {
     const nowCompleted = !completedSteps.includes(stepOrder)
     // Optimistic update
-    setCompletedSteps(prev =>
-      nowCompleted ? [...prev, stepOrder] : prev.filter(s => s !== stepOrder)
+    setCompletedSteps((previous) =>
+      setCompletedStepOrder(previous, stepOrder, nowCompleted),
     )
     const result = await setStepCompletion(execution.id, stepOrder, nowCompleted)
     if (result?.error) {
       // Revert on failure
-      setCompletedSteps(prev =>
-        nowCompleted ? prev.filter(s => s !== stepOrder) : [...prev, stepOrder]
+      setCompletedSteps((previous) =>
+        setCompletedStepOrder(previous, stepOrder, !nowCompleted),
       )
     } else if (result?.completedSteps) {
       setCompletedSteps(result.completedSteps)
@@ -217,7 +237,7 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
             <h3 className="font-handwriting text-2xl font-bold text-gray-800 mb-6 text-center">Các bước thực hiện</h3>
             <div className="bg-white p-6 shadow-md border border-gray-200 transform -rotate-1">
               <Timeline>
-                {steps.map((step: any, index: number) => {
+                {steps.map((step, index) => {
                   const stepOrder = step.order || index + 1
                   const isCompleted = completedSteps.includes(stepOrder)
 
@@ -258,7 +278,7 @@ export default function ActivityView({ plan, execution }: ActivityViewProps) {
           <div className="bg-white p-6 shadow-md border border-gray-200 mb-8 transform rotate-1">
             <h3 className="font-handwriting text-2xl font-bold text-gray-800 mb-4 text-center">💬 Câu hỏi gợi ý</h3>
             <div className="space-y-4">
-              {conversationStarters.map((prompt: any, index: number) => (
+              {conversationStarters.map((prompt, index) => (
                 <div key={index} className="p-4 bg-yellow-50 border border-yellow-200 shadow-sm">
                   <p className="text-xl text-yellow-800">{prompt.prompt_vi}</p>
                 </div>

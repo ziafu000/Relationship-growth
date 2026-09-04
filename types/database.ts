@@ -484,3 +484,41 @@ export interface Database {
     Enums: {}
   }
 }
+
+/**
+ * Supabase JS expects generated table definitions to include Relationships.
+ * This project maintains its schema types by hand, so add the generated field
+ * at the client boundary without weakening row, insert, update, or RPC types.
+ */
+type TableRelationships<TableName> = TableName extends 'goals'
+  ? [
+      {
+        foreignKeyName: 'goals_check_in_id_fkey'
+        columns: ['check_in_id']
+        isOneToOne: false
+        referencedRelation: 'check_ins'
+        referencedColumns: ['id']
+      },
+      {
+        foreignKeyName: 'goals_relationship_id_fkey'
+        columns: ['relationship_id']
+        isOneToOne: false
+        referencedRelation: 'relationships'
+        referencedColumns: ['id']
+      },
+    ]
+  : []
+
+export type SupabaseDatabase = {
+  public: {
+    Tables: {
+      [TableName in keyof Database['public']['Tables']]:
+        Database['public']['Tables'][TableName] & {
+          Relationships: TableRelationships<TableName>
+        }
+    }
+    Views: Database['public']['Views']
+    Functions: Database['public']['Functions']
+    Enums: Database['public']['Enums']
+  }
+}
