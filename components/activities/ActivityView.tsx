@@ -53,7 +53,7 @@ export default function ActivityView({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const stepControllerRef = useRef<ReturnType<typeof createStepCompletionController> | null>(null)
 
-  if (!stepControllerRef.current) {
+  if (stepControllerRef.current == null) {
     stepControllerRef.current = createStepCompletionController(
       completedStepOrders(execution.steps_completed),
       (stepOrder, completed) => setStepCompletion(execution.id, stepOrder, completed),

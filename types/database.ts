@@ -478,7 +478,7 @@ export interface Database {
           p_step_order: number
           p_completed: boolean
         }
-        Returns: any
+        Returns: Array<{ step_id: number; completed_at?: string }>
       }
     }
     Enums: {}

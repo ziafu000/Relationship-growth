@@ -198,7 +198,7 @@ relationship-growth-os/
 ├── types/
 │   └── database.ts
 ├── supabase/
-│   ├── migrations/          # 8 migration files
+│   ├── migrations/          # Ordered database migrations
 │   └── seed/
 │       └── sample-activities.sql
 ├── middleware.ts
